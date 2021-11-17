@@ -1,5 +1,6 @@
 from cmu_112_graphics import *
 from fpsmeter import *
+from tank import *
 
 # --------------------
 # GRAPHICS FRAMEWORK FUNCTIONS
