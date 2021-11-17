@@ -20,10 +20,19 @@ class Game():
     def __init__(self, numPlayers = 2):
         self.numPlayers = numPlayers
 
+        # Initialize score
+        self.scores = {}
+        for i in range(1, self.numPlayers + 1):
+            self.scores[i] = 0
+
         # Initialize controls
         self.controls = {}
         for i in range(1, self.numPlayers + 1):
             self.controls[i] = self.DEFAULT_CONTROLS[i]
 
+        # Initialize round number
+        self.roundNum = 0
+
     def startRound(self):
-        self.round = Round()
+        self.round = Round(self.numPlayers)
+        self.roundNum += 1

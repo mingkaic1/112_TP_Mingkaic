@@ -22,7 +22,6 @@ def appStarted(app):
 
 def newMaze(app):
     app.maze = Maze(20, 20)
-    app.maze.generateMaze()
     app.numRows = app.maze.numRows
     app.numCols = app.maze.numCols
 

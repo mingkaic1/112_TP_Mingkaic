@@ -59,8 +59,10 @@ class Maze():
     def __init__(self, numRows = 4, numCols = 4):
         self.numRows = numRows
         self.numCols = numCols
-        # Make grid (2D list of Cell objects)
+        # Make .grid (2D list of Cell objects)
         self.makeGrid(numRows, numCols)
+        # Generate maze
+        self.generateMaze()
 
     def __repr__(self):
         result = ""
@@ -69,6 +71,7 @@ class Maze():
                 result += f"{self.grid[row][col]}\n"
         return result
 
+    # HELPER FUNCTION
     def makeGrid(self, numRows, numCols):
         self.grid = []
         for row in range(numRows):

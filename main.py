@@ -10,6 +10,10 @@ WIDTH = 1000
 HEIGHT = 1000
 TARGET_FPS = 100
 
+# --------------------
+# START APP
+# --------------------
+
 def appStarted(app):
     app.timerDelay = 1000 // TARGET_FPS
     app.mode = "gameMode"
@@ -44,27 +48,27 @@ def gameMode_keyPressed(app, event):
 
     # Player 1
     if (event.key == app.game.controls[1]["forward"]):
-        round.tank1.startMovingForward()
+        app.game.round.tank[1].startMovingForward()
     if (event.key == app.game.controls[1]["backward"]):
-        round.tank1.startMovingBackward()
+        app.game.round.tank[1].startMovingBackward()
     if (event.key == app.game.controls[1]["left"]):
-        round.tank1.startSteeringLeft()
+        app.game.round.tank[1].startSteeringLeft()
     if (event.key == app.game.controls[1]["right"]):
-        round.tank1.startMovingRight()
+        app.game.round.tank[1].startMovingRight()
     if (event.key == app.game.controls[1]["fire"]):
-        round.tank1.fire()
+        app.game.round.tank[1].fire()
 
     # Player 2
     if (event.key == app.game.controls[2]["forward"]):
-        round.tank2.startMovingForward()
+        app.game.round.tanks[2].startMovingForward()
     if (event.key == app.game.controls[2]["backward"]):
-        round.tank2.startMovingBackward()
+        app.game.round.tanks[2].startMovingBackward()
     if (event.key == app.game.controls[2]["left"]):
-        round.tank2.startSteeringLeft()
+        app.game.round.tanks[2].startSteeringLeft()
     if (event.key == app.game.controls[2]["right"]):
-        round.tank2.startMovingRight()
+        app.game.round.tanks[2].startMovingRight()
     if (event.key == app.game.controls[2]["fire"]):
-        round.tank2.fire()
+        app.game.round.tanks[2].fire()
 
 def gameMode_keyReleased(app, event):
 
