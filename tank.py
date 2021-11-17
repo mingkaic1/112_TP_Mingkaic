@@ -3,24 +3,25 @@ from projectiles import *
 
 class Tank():
 
-    speed = 4
-    dTheta = 10
+    SIZE = 20
+    SPEED = 4
+    D_THETA = 10
     STARTING_AMMO = 5
     MAX_AMMO = 5
 
     def __init__(self, x = 0, y = 0):
         self.x, self.y = x, y
-        self.size = 20
-        self.length = self.size # Derived
-        self.width = self.length * 0.75 # Derived
-
+        self.length = self.SIZE
+        self.width = self.length * 0.75
         self.theta = 0 # Facing angle in degrees from North
 
+        # Init steering & movement booleans
         self.isSteeringLeft = False
         self.isSteeringRight = False
         self.isMovingForward = False
         self.isMovingBackward = False
 
+        # Init ammo counter
         self.ammo = self.STARTING_AMMO
 
     # Return list of coords of 4 corners, counterclockwise from front-right
@@ -48,10 +49,10 @@ class Tank():
     # Steering
 
     def steerLeft(self):
-        self.theta += self.dTheta
+        self.theta += self.D_THETA
 
     def steerRight(self):
-        self.theta -= self.dTheta
+        self.theta -= self.D_THETA
 
     def startSteeringLeft(self):
         self.isSteeringLeft = True
@@ -82,14 +83,14 @@ class Tank():
     def moveForward(self):
         self.sin = math.sin(math.radians(self.theta))
         self.cos = math.cos(math.radians(self.theta))
-        self.x -= self.speed * self.sin
-        self.y -= self.speed * self.cos
+        self.x -= self.SPEED * self.sin
+        self.y -= self.SPEED * self.cos
 
     def moveBackward(self):
         self.sin = math.sin(math.radians(self.theta))
         self.cos = math.cos(math.radians(self.theta))
-        self.x += self.speed * self.sin
-        self.y += self.speed * self.cos
+        self.x += self.SPEED * self.sin
+        self.y += self.SPEED * self.cos
 
     def startMovingForward(self):
         self.isMovingForward = True

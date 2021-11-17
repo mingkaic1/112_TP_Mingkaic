@@ -44,7 +44,7 @@ def moveBullets(app):
     i = 0
     while i < len(app.bullets):
         app.bullets[i].move()
-        if (app.bullets[i].shouldDespawn == True):
+        if (app.bullets[i].isDespawned == True):
             app.bullets.pop(i)
             app.tank1.replenishAmmo()
         else:
@@ -94,6 +94,6 @@ def drawTank(app, canvas, tank):
 
 def drawBullets(app, canvas):
     for bullet in app.bullets:
-        canvas.create_oval(bullet.x - bullet.R, bullet.y - bullet.R, bullet.x + bullet.R, bullet.y + bullet.R, fill = "black")
+        canvas.create_oval(bullet.x - bullet.RADIUS, bullet.y - bullet.RADIUS, bullet.x + bullet.RADIUS, bullet.y + bullet.RADIUS, fill ="black")
 
 runApp(width=WIDTH, height=HEIGHT)
