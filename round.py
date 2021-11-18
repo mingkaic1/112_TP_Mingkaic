@@ -10,6 +10,7 @@ class Round():
         self.map = Map(self.maze, 1000, 1000)
 
         # Create Tank objects
-        self.tanks = {}
-        for i in range(1, self.numPlayers + 1):
-            self.tanks[i] = Tank(0, 0)
+        self.tanks = []
+        for i in range(self.numPlayers):
+            # self.tanks[i] = Tank(100, 100)
+            self.tanks.append(Tank(100, 100))

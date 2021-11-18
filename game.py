@@ -3,14 +3,14 @@ from round import *
 class Game():
 
     DEFAULT_CONTROLS = {
-        1: {
+        0: {
             "forward": "Up",
             "backward": "Down",
             "left": "Left",
             "right": "Right",
             "fire": "Space"
         },
-        2: {
+        1: {
             "forward": "w",
             "backward": "s",
             "left": "a",
@@ -24,12 +24,12 @@ class Game():
 
         # Initialize score
         self.scores = {}
-        for i in range(1, self.numPlayers + 1):
+        for i in range(self.numPlayers):
             self.scores[i] = 0
 
         # Initialize controls
         self.controls = {}
-        for i in range(1, self.numPlayers + 1):
+        for i in range(self.numPlayers):
             self.controls[i] = self.DEFAULT_CONTROLS[i]
 
         # Initialize round number

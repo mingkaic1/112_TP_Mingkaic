@@ -4,7 +4,7 @@ from projectiles import *
 class Tank():
 
     SIZE = 20
-    SPEED = 4
+    SPEED = 6
     D_THETA = 5
     STARTING_AMMO = 1000
     MAX_AMMO = 5
@@ -45,6 +45,12 @@ class Tank():
             self.y + (self.length / 2) * self.cos - (self.width / 2) * self.sin
         )
         return corner0, corner1, corner2, corner3
+
+    # Update
+
+    def update(self):
+        self.move()
+        self.steer()
 
     # Steering
 
