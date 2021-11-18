@@ -42,3 +42,17 @@ class Game():
         self.round = Round(self.numPlayers)
         self.roundNum += 1
         print(f"Game: Round {self.roundNum} started!")
+
+    def checkKeyPressed(self, key):
+        for i in self.controls:
+            for binding in self.controls[i]:
+                if key == self.controls[i][binding]:
+                    self.round.controlTank(i, binding, "pressed")
+                    return
+
+    def checkKeyReleased(self, key):
+        for i in self.controls:
+            for binding in self.controls[i]:
+                if key == self.controls[i][binding]:
+                    self.round.controlTank(i, binding, "released")
+                    return

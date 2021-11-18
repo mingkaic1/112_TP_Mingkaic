@@ -9,8 +9,36 @@ class Round():
         self.maze = Maze(10, 10)
         self.map = Map(self.maze, 1000, 1000)
 
-        # Create Tank objects
+        # Initialize .tanks and Tank objects
         self.tanks = []
         for i in range(self.numPlayers):
-            # self.tanks[i] = Tank(100, 100)
             self.tanks.append(Tank(100, 100))
+
+        # Initialize .projectiles
+        self.projectiles = []
+
+    def controlTank(self, tankIndex, binding, keyStatus):
+
+        if keyStatus == "pressed":
+            if binding == "forward":
+                self.tanks[tankIndex].startMovingForward()
+            if binding == "backward":
+                self.tanks[tankIndex].startMovingBackward()
+            if binding == "left":
+                self.tanks[tankIndex].startSteeringLeft()
+            if binding == "right":
+                self.tanks[tankIndex].startSteeringRight()
+            if binding == "fire":
+                projectile = self.tanks[tankIndex].fire()
+                if projectile != None:
+                    self.projectiles.append(projectile)
+
+        if keyStatus == "released":
+            if binding == "forward":
+                self.tanks[tankIndex].stopMovingForward()
+            if binding == "backward":
+                self.tanks[tankIndex].stopMovingBackward()
+            if binding == "left":
+                self.tanks[tankIndex].stopSteeringLeft()
+            if binding == "right":
+                self.tanks[tankIndex].stopSteeringRight()

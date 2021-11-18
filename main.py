@@ -50,47 +50,25 @@ def gameMode_timerFired(app):
     for i in range(len(app.game.round.tanks)):
         app.game.round.tanks[i].update()
 
-def checkTankKeyPressed(app, event, i):
-    if (event.key == app.game.controls[i]["forward"]):
-        app.game.round.tanks[i].startMovingForward()
-    if (event.key == app.game.controls[i]["backward"]):
-        app.game.round.tanks[i].startMovingBackward()
-    if (event.key == app.game.controls[i]["left"]):
-        app.game.round.tanks[i].startSteeringLeft()
-    if (event.key == app.game.controls[i]["right"]):
-        app.game.round.tanks[i].startSteeringRight()
-    if (event.key == app.game.controls[i]["fire"]):
-        app.game.round.tanks[i].fire()
-
-def checkTankKeyReleased(app, event, i):
-    if (event.key == app.game.controls[i]["forward"]):
-        app.game.round.tanks[i].stopMovingForward()
-    if (event.key == app.game.controls[i]["backward"]):
-        app.game.round.tanks[i].stopMovingBackward()
-    if (event.key == app.game.controls[i]["left"]):
-        app.game.round.tanks[i].stopSteeringLeft()
-    if (event.key == app.game.controls[i]["right"]):
-        app.game.round.tanks[i].stopSteeringRight()
+    print(app.game.round.projectiles)
 
 def gameMode_keyPressed(app, event):
-    for i in range(len(app.game.round.tanks)):
-        checkTankKeyPressed(app, event, i)
+
+    # Check if event.key controls tank; if so, make the control
+    app.game.checkKeyPressed(event.key)
 
     if (event.key == "r"):
         app.game.round.isOver = True
-    if (event.key == "p"):
-        print(app.game.round.maze)
 
 def gameMode_keyReleased(app, event):
 
-    for i in range(len(app.game.round.tanks)):
-        checkTankKeyReleased(app, event, i)
+    # Check if event.key controls tank; if so, make the control
+    app.game.checkKeyReleased(event.key)
 
 def gameMode_redrawAll(app, canvas):
     drawWalls(app, canvas)
     drawTanks(app, canvas)
-
-    print(app.game.round.tanks[0].isMovingForward)
+    drawProjectiles(app, canvas)
 
 def drawWalls(app, canvas):
     for wall in app.game.round.map.wallRectangles:
@@ -100,5 +78,14 @@ def drawTanks(app, canvas):
     for i in range(len(app.game.round.tanks)):
         corners = app.game.round.tanks[i].getCorners()
         canvas.create_polygon(corners)
+
+def drawProjectiles(app, canvas):
+    for i in range(len(app.game.round.projectiles)):
+        projectile = app.game.round.projectiles[i]
+        canvas.create_oval(projectile.x - projectile.r,
+                           projectile.y - projectile.r,
+                           projectile.x + projectile.r,
+                           projectile.y + projectile.r,
+                           fill = "black")
 
 runApp(width = WIDTH, height = HEIGHT)

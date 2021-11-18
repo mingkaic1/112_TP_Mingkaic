@@ -5,7 +5,7 @@ class Tank():
 
     SIZE = 20
     SPEED = 6
-    D_THETA = 5
+    D_THETA = 8
     STARTING_AMMO = 1000
     MAX_AMMO = 5
 
