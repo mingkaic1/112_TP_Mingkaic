@@ -5,8 +5,8 @@ class Tank():
 
     SIZE = 20
     SPEED = 4
-    D_THETA = 10
-    STARTING_AMMO = 5
+    D_THETA = 5
+    STARTING_AMMO = 1000
     MAX_AMMO = 5
 
     def __init__(self, x = 0, y = 0):

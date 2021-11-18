@@ -20,12 +20,7 @@ class MapCell():
         self.row = row
         self.col = col
         self.wallList = [] # Temporary list to store walls as list of 4 True/Falses
-        self.walls = {
-            "North": None,
-            "West": None,
-            "South": None,
-            "East": None
-        }
+        self.walls = []
 
     def __repr__(self):
         return f"MapCell({self.row}, {self.col}): {self.wallList}"
