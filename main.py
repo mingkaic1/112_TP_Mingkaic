@@ -5,6 +5,9 @@ from tank import *
 from projectiles import *
 from obstacles import *
 from fpsmeter import *
+from round import *
+from game import *
+
 
 WIDTH = 1000
 HEIGHT = 1000
@@ -23,11 +26,9 @@ def appStarted(app):
     app.fpsMeter = FPSmeter()
 
     # Initialize Game object
-    startGame(app)
-
-def startGame(app):
     app.game = Game()
     app.game.startRound()
+    print(app.game.round.map.wallRectangles)
 
 # --------------------
 # GAME MODE
@@ -38,65 +39,54 @@ def gameMode_timerFired(app):
 
     # FPSmeter
     app.fpsMeter.addFrame()
-    print(f"{FPS: }app.fpsMeter.getFPS()")
+    # print(f"FPS: {app.fpsMeter.getFPS()}")
 
     # Start new round
-    if app.game.round.isOver == True:
+    if (app.game.round == None) or (app.game.round.isOver == True):
         app.game.startRound()
+
+def checkTankKeyPressed(app, event, i):
+    if (event.key == app.game.controls[i]["forward"]):
+        app.game.round.tanks[i].startMovingForward()
+    if (event.key == app.game.controls[i]["backward"]):
+        app.game.round.tanks[i].startMovingBackward()
+    if (event.key == app.game.controls[i]["left"]):
+        app.game.round.tanks[i].startSteeringLeft()
+    if (event.key == app.game.controls[i]["right"]):
+        app.game.round.tanks[i].startMovingRight()
+    if (event.key == app.game.controls[i]["fire"]):
+        app.game.round.tanks[i].fire()
+
+def checkTankKeyReleased(app, event, i):
+    if (event.key == app.game.controls[i]["forward"]):
+        app.game.round.tanks[i].stopMovingForward()
+    if (event.key == app.game.controls[i]["backward"]):
+        app.game.round.tanks[i].stopMovingBackward()
+    if (event.key == app.game.controls[i]["left"]):
+        app.game.round.tanks[i].stopSteeringLeft()
+    if (event.key == app.game.controls[i]["right"]):
+        app.game.round.tanks[i].stopMovingRight()
 
 def gameMode_keyPressed(app, event):
 
-    # Player 1
-    if (event.key == app.game.controls[1]["forward"]):
-        app.game.round.tank[1].startMovingForward()
-    if (event.key == app.game.controls[1]["backward"]):
-        app.game.round.tank[1].startMovingBackward()
-    if (event.key == app.game.controls[1]["left"]):
-        app.game.round.tank[1].startSteeringLeft()
-    if (event.key == app.game.controls[1]["right"]):
-        app.game.round.tank[1].startMovingRight()
-    if (event.key == app.game.controls[1]["fire"]):
-        app.game.round.tank[1].fire()
+    for i in range(1, len(app.game.round.tanks)):
+        checkTankKeyPressed(app, event, i)
 
-    # Player 2
-    if (event.key == app.game.controls[2]["forward"]):
-        app.game.round.tanks[2].startMovingForward()
-    if (event.key == app.game.controls[2]["backward"]):
-        app.game.round.tanks[2].startMovingBackward()
-    if (event.key == app.game.controls[2]["left"]):
-        app.game.round.tanks[2].startSteeringLeft()
-    if (event.key == app.game.controls[2]["right"]):
-        app.game.round.tanks[2].startMovingRight()
-    if (event.key == app.game.controls[2]["fire"]):
-        app.game.round.tanks[2].fire()
+    if (event.key == "r"):
+        app.game.round.isOver = True
+    if (event.key == "p"):
+        print(app.game.round.maze)
 
 def gameMode_keyReleased(app, event):
 
-    # Player 1
-    if (event.key == app.game.controls[1]["forward"]):
-        round.tank1.stopMovingForward()
-    if (event.key == app.game.controls[1]["backward"]):
-        round.tank1.stopMovingBackward()
-    if (event.key == app.game.controls[1]["left"]):
-        round.tank1.stopSteeringLeft()
-    if (event.key == app.game.controls[1]["right"]):
-        round.tank1.stopMovingRight()
-    if (event.key == app.game.controls[1]["fire"]):
-        round.tank1.fire()
-
-    # Player 2
-    if (event.key == app.game.controls[2]["forward"]):
-        round.tank2.stopMovingForward()
-    if (event.key == app.game.controls[2]["backward"]):
-        round.tank2.stopMovingBackward()
-    if (event.key == app.game.controls[2]["left"]):
-        round.tank2.stopSteeringLeft()
-    if (event.key == app.game.controls[2]["right"]):
-        round.tank2.stopMovingRight()
-    if (event.key == app.game.controls[2]["fire"]):
-        round.tank2.fire()
+    for i in range(1,len(app.game.round.tanks)):
+        checkTankKeyReleased(app, event, i)
 
 def gameMode_redrawAll(app, canvas):
-    pass
+    drawWalls(app, canvas)
+
+def drawWalls(app, canvas):
+    for wall in app.game.round.map.wallRectangles:
+        canvas.create_rectangle(*wall, fill = "black")
 
 runApp(width = WIDTH, height = HEIGHT)

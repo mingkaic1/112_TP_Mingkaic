@@ -3,7 +3,7 @@ import math
 class Projectile():
 
     SPEED = 4
-    RADIUS = 10
+    RADIUS = 2
     LIFETIME_FRAMES = 50
 
     def __init__(self, x, y, theta): # 'theta' is angle in degrees from North
@@ -51,6 +51,12 @@ class Projectile():
     # HELPER FUNCTION
     # Takes as input a Wall object, and if the Projectile will imminently bounce on Wall, change the .nextX and/or .nextY attributes
     def checkBounce(self, wall):
+
+        # TO DO (probably): Implement a better collision detection system
+        # IDEA: For checking each side of the Wall, define 2 line segments, each defined between 2 points:
+        #   Segment 1: Projectile's current position & Next position
+        #   Segment 2: Edge of Wall
+        # Use some linear algebra (either formula, or existing module) to check if the 2 segments intersect
 
         # Check for bounce on BOTTOM surface of Wall
         if ((self.vy < 0) and                   # Projectile moving up

@@ -1,3 +1,7 @@
+from maze import *
+from map import *
+from tank import *
+
 class Round():
     def __init__(self, numPlayers):
         self.numPlayers = numPlayers

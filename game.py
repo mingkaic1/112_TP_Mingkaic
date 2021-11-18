@@ -1,3 +1,5 @@
+from round import *
+
 class Game():
 
     DEFAULT_CONTROLS = {
@@ -33,6 +35,10 @@ class Game():
         # Initialize round number
         self.roundNum = 0
 
+        # Initialize round
+        self.round = None
+
     def startRound(self):
         self.round = Round(self.numPlayers)
         self.roundNum += 1
+        print(f"Game: Round {self.roundNum} started!")
