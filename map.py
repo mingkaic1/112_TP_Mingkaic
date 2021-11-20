@@ -158,7 +158,7 @@ class MapCell():
         self.walls[direction] = wall
 
     def __repr__(self):
-        return f"MapCell({self.row}, {self.col}): {self.wallList}"
+        return f"MapCell({self.row}, {self.col})"
 
     def __hash__(self):
         return hash(self.getHashables())

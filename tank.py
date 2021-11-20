@@ -24,8 +24,18 @@ class Tank():
         # Init ammo counter
         self.ammo = self.STARTING_AMMO
 
-    # Return list of coords of 4 corners, counterclockwise from front-right
+        # Initialize .currentMapCells (list of 9 MapCell objects centered around Tank)
+        self.currentMapCells = []
+
+        # Initialize .corners
+        self.corners = []
+        self.updateCorners()
+
     def getCorners(self):
+        return self.corners
+
+    # Return list of coords of 4 corners, counterclockwise from front-right
+    def updateCorners(self):
         self.sin = math.sin(math.radians(self.theta))
         self.cos = math.cos(math.radians(self.theta))
         corner0 = (
@@ -44,13 +54,84 @@ class Tank():
             self.x + (self.length / 2) * self.sin + (self.width / 2) * self.cos,
             self.y + (self.length / 2) * self.cos - (self.width / 2) * self.sin
         )
-        return corner0, corner1, corner2, corner3
+        self.corners = [corner0, corner1, corner2, corner3]
+
+    def setCurrentMapCells(self, mapCells):
+        self.currentMapCells = mapCells
 
     # Update
-
     def update(self):
         self.move()
         self.steer()
+        # Update .corners
+        self.updateCorners()
+        for i in range(len(self.currentMapCells)):
+            for j in range(len(self.currentMapCells[i].walls)):
+                wall = self.currentMapCells[i].walls[j]
+                if wall != None:
+                    self.checkCollision(wall)
+
+    def checkCollision(self, wall):
+        xMin, xMax, yMin, yMax = self.getMinMaxXY()
+
+        # NOTE:
+        # Current collision detection does NOT use Separating Axis Theorem (SAT).
+        # The Tank has to be entirely out of a Wall's span for there to be no
+        # collision (i.e. the Tank has to move a few pixels "around" the Wall's
+        # corner to be able to stop colliding)
+        #
+        # TO DO:
+        # Implement SAT (Vector classes, function for projection vector, etc.)
+        #
+        # ALSO, right now this is very jank (tends to collide with 2 walls at the corner at the same time)
+
+        # Check for collision on BOTTOM surface of Wall
+        #   - If up-most point of Tank polygon is above bottom surface wall,
+        #     while down-most point is below
+        if ((yMin < wall.y2) and
+            (yMax > wall.y2) and not
+            ((xMax < wall.x1) or (xMin > wall.x2))):
+            self.y += (wall.y2 - yMin)
+            self.updateCorners()
+            xMin, xMax, yMin, yMax = self.getMinMaxXY()
+
+        # Check for collision on TOP surface of Wall
+        if ((yMax > wall.y1) and
+            (yMin < wall.y1) and not
+            ((xMax < wall.x1) or (xMin > wall.x2))):
+            self.y -= (yMax - wall.y1)
+            self.updateCorners()
+            xMin, xMax, yMin, yMax = self.getMinMaxXY()
+
+        # Check for collision on RIGHT surface of Wall
+        if ((xMin < wall.x2) and
+            (xMax > wall.x2) and not
+            ((yMax < wall.y1) or (yMin > wall.y2))):
+            self.x += (wall.x2 - xMin)
+            self.updateCorners()
+            xMin, xMax, yMin, yMax = self.getMinMaxXY()
+
+        # Check for collision on BOTTOM surface of Wall
+        if ((xMax > wall.x1) and
+            (xMin < wall.x1) and not
+            ((yMax < wall.y1) or (yMin > wall.y2))):
+            self.x -= (xMax - wall.x1)
+            self.updateCorners()
+            xMin, xMax, yMin, yMax = self.getMinMaxXY()
+
+    # HELPER FUNCTION
+    #   - Until SAT collision detection implemented
+    def getMinMaxXY(self):
+        xValues = []
+        yValues = []
+        for i in range(len(self.corners)):
+            xValues.append(self.corners[i][0])
+            yValues.append(self.corners[i][1])
+        xMin = min(xValues)  # Left-most x value
+        xMax = max(xValues)  # Right-most x value
+        yMin = min(yValues)  # Up-most y value
+        yMax = max(yValues)  # Down-most y value
+        return xMin, xMax, yMin, yMax
 
     # Steering
 

@@ -51,16 +51,23 @@ class Round():
         for i in range(len(self.projectiles)):
             row = int(self.projectiles[i].y // self.mapCellSize)
             col = int(self.projectiles[i].x // self.mapCellSize)
-            print(row, col)
-
-
             currentMapCell = self.map.getMapCell(row, col)
             self.projectiles[i].setCurrentCell(currentMapCell)
-            print("check")
             self.projectiles[i].move()
 
     def updateTanks(self):
         for i in range(len(self.tanks)):
+            row = int(self.tanks[i].y // self.mapCellSize)
+            col = int(self.tanks[i].x // self.mapCellSize)
+            currentMapCells = []
+            for dRow in [-1, 0, 1]:
+                for dCol in [-1, 0, 1]:
+                    rowToAdd = row + dRow
+                    colToAdd = col + dCol
+                    if (rowToAdd in range(0, self.map.numRows)) and (colToAdd in range(0, self.map.numCols)):
+                        currentMapCells.append(self.map.getMapCell(rowToAdd, colToAdd))
+            self.tanks[i].setCurrentMapCells(currentMapCells)
+            print(self.tanks[i].currentMapCells)
             self.tanks[i].update()
 
     def getProjectilesTranslatedCoordinates(self):
