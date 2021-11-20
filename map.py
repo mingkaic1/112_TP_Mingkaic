@@ -2,27 +2,22 @@ from obstacles import *
 
 class Map():
 
-    WALL_HALF_WIDTH = 2
-
     # Initialize with an already-generated Map object
     # 'width' and 'height' is pixel size of playable map on screen, NOT whole window
-    def __init__(self, maze, width, height):
+    def __init__(self, maze, settings):
         self.maze = maze
-        self.width = width
-        self.height = height
+        self.settings = settings
+
+        self.mapCellSize = self.settings["MAPCELL_SIZE"]
+        self.wallHalfWidth = self.settings["WALL_HALF_WIDTH"]
 
         self.numRows = self.maze.numRows
         self.numCols = self.maze.numCols
 
-        self.wallHalfWidth = self.WALL_HALF_WIDTH
-
         # Initialize measurement attributes
         #   - Idea: Coordinates for MapCells and Walls are integers
-        #   - (.effectiveWidth may be a few pixels smaller than .width)
-        self.mapCellWidth = self.width // self.numCols
-        self.mapCellHeight = self.height // self.numRows
-        self.effectiveWidth = self.mapCellWidth * self.numCols
-        self.effectiveHeight = self.mapCellHeight * self.numRows
+        self.width = self.mapCellSize * self.numCols
+        self.height = self.mapCellSize * self.numRows
 
         # Initialize .grid (2D list of MapCell objects)
         self.grid = []
@@ -32,17 +27,19 @@ class Map():
         #   - To optimize drawing (tkinter can just draw all rectangles based on .wallRectangles, instead
         #       of going through each MapCell object)
         #   - 4 edges of map (i.e. outlines) are stored as single rectangles
-        self.wallRectangles = []
         self.makeWallRectangles()
 
-    # Build .grid (currently does not contain information about walls)
+        # Initialize .translatedWallRectangles (same as .wallRectangles but with all rectangles shifted away from the top-left by margin amount)
+        self.makeTranslatedWallRectangles()
+
+    # Build .grid
     def makeGrid(self):
         for row in range(self.numRows):
             self.grid.append([])
             for col in range(self.numCols):
                 # Add in the MapCell object
-                p1 = (col * self.mapCellWidth, row * self.mapCellHeight)
-                p2 = ((col + 1) * self.mapCellWidth, (row + 1) * self.mapCellHeight)
+                p1 = (col * self.mapCellSize, row * self.mapCellSize)
+                p2 = ((col + 1) * self.mapCellSize, (row + 1) * self.mapCellSize)
                 self.grid[row].append(MapCell(row, col, p1, p2))
 
                 # Top wall
@@ -74,26 +71,27 @@ class Map():
                     self.grid[row][col].setWall(3, self.wallHalfWidth)
 
     def makeWallRectangles(self):
+        self.wallRectangles = []
         # Top wall as single rectangle
         self.wallRectangles.append((0 - self.wallHalfWidth,
                                     0 - self.wallHalfWidth,
-                                    self.effectiveWidth + self.wallHalfWidth,
+                                    self.width + self.wallHalfWidth,
                                     self.wallHalfWidth))
         # Bottom wall as single rectangle
         self.wallRectangles.append((0 - self.wallHalfWidth,
-                                    self.effectiveHeight - self.wallHalfWidth,
-                                    self.effectiveWidth + self.wallHalfWidth,
-                                    self.effectiveHeight + self.wallHalfWidth))
+                                    self.height - self.wallHalfWidth,
+                                    self.width + self.wallHalfWidth,
+                                    self.height + self.wallHalfWidth))
         # Left wall as single rectangle
         self.wallRectangles.append((0 - self.wallHalfWidth,
                                     0 - self.wallHalfWidth,
                                     self.wallHalfWidth,
-                                    self.effectiveHeight + self.wallHalfWidth))
+                                    self.height + self.wallHalfWidth))
         # Right wall as single rectangle
-        self.wallRectangles.append((self.effectiveWidth - self.wallHalfWidth,
+        self.wallRectangles.append((self.width - self.wallHalfWidth,
                                     0 - self.wallHalfWidth,
-                                    self.effectiveWidth + self.wallHalfWidth,
-                                    self.effectiveHeight + self.wallHalfWidth))
+                                    self.width + self.wallHalfWidth,
+                                    self.height + self.wallHalfWidth))
 
         for row in range(len(self.grid)):
             for col in range(len(self.grid[0])):
@@ -111,6 +109,15 @@ class Map():
                                                 rightWall.y1,
                                                 rightWall.x2,
                                                 rightWall.y2))
+
+    def makeTranslatedWallRectangles(self):
+        self.translatedWallRectangles = []
+        for i in range(len(self.wallRectangles)):
+            newWall = (self.wallRectangles[i][0] + 100,
+                       self.wallRectangles[i][1] + 100,
+                       self.wallRectangles[i][2] + 100,
+                       self.wallRectangles[i][3] + 100,)
+            self.translatedWallRectangles.append(newWall)
 
     def getMapCell(self, row, col):
         return self.grid[row][col]

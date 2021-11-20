@@ -9,9 +9,9 @@ from round import *
 from game import *
 from settings import *
 
-WIDTH = 1200
-HEIGHT = 1000
 TARGET_FPS = 100
+WIDTH = settings["WINDOW_WIDTH"]
+HEIGHT = settings["WINDOW_HEIGHT"]
 
 # --------------------
 # START APP
@@ -44,8 +44,7 @@ def gameMode_timerFired(app):
         app.game.startRound()
 
     # Update Tanks
-    for i in range(len(app.game.round.tanks)):
-        app.game.round.tanks[i].update()
+    app.game.round.updateTanks()
 
     # Update Projectiles
     app.game.round.updateProjectiles()
@@ -69,23 +68,25 @@ def gameMode_redrawAll(app, canvas):
     drawProjectiles(app, canvas)
     drawFPS(app, canvas)
 
+# --------------------
+# DRAWING HELPER FUNCTIONS
+# --------------------
+
 def drawWalls(app, canvas):
-    for wall in app.game.round.map.wallRectangles:
+    for wall in app.game.round.map.translatedWallRectangles:
         canvas.create_rectangle(*wall, fill = "black")
 
 def drawTanks(app, canvas):
-    for i in range(len(app.game.round.tanks)):
-        corners = app.game.round.tanks[i].getCorners()
-        canvas.create_polygon(corners)
+    # Get list of lists, each containing 4 tuples representing corners of tank polygon
+    tanksTranslatedCorners = app.game.round.getTanksTranslatedCorners()
+    for i in range(len(tanksTranslatedCorners)):
+        canvas.create_polygon(tanksTranslatedCorners[i])
 
 def drawProjectiles(app, canvas):
-    for i in range(len(app.game.round.projectiles)):
-        projectile = app.game.round.projectiles[i]
-        canvas.create_oval(projectile.x - projectile.r,
-                           projectile.y - projectile.r,
-                           projectile.x + projectile.r,
-                           projectile.y + projectile.r,
-                           fill = "black")
+    # Get list of tuples, each representing 4 canvas coordinates of circle
+    projectilesTranslatedCoordinates = app.game.round.getProjectilesTranslatedCoordinates()
+    for i in range(len(projectilesTranslatedCoordinates)):
+        canvas.create_oval(projectilesTranslatedCoordinates[i], fill = "black")
 
 def drawFPS(app, canvas):
     canvas.create_text(5, 5, text = f"{round(app.fpsMeter.getFPS())}", anchor = "nw")

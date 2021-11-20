@@ -28,13 +28,6 @@ class Projectile():
         #   - Stores the MapCell object on which the projectile is currently located
         self.currentMapCell = None
 
-    # SOON OBSOLETE
-    def bounce(self, isVertical = True): # True for vertical bounce; False for horizontal bounce
-        if (isVertical == True):
-            self.vy = -self.vy
-        else:
-            self.vx = -self.vx
-
     def setCurrentCell(self, mapCell):
         self.currentMapCell = mapCell
 
