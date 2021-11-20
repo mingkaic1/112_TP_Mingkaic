@@ -43,7 +43,8 @@ class Projectile():
         self.nextY = self.y + self.vy
         for i in range(len(self.currentMapCell.walls)):
             wall = self.currentMapCell.walls[i]
-            self.checkBounce(wall)
+            if wall != None:
+                self.checkBounce(wall)
         self.x = self.nextX
         self.y = self.nextY
         self.decrementLife()

@@ -41,7 +41,7 @@ class Game():
         self.round = None
 
     def startRound(self):
-        self.round = Round(self.numPlayers)
+        self.round = Round(self.settings)
         self.roundNum += 1
         print(f"Game: Round {self.roundNum} started!")
 

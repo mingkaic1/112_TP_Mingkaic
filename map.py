@@ -112,6 +112,9 @@ class Map():
                                                 rightWall.x2,
                                                 rightWall.y2))
 
+    def getMapCell(self, row, col):
+        return self.grid[row][col]
+
 class MapCell():
 
     def __init__(self, row, col, p1, p2):

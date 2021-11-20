@@ -3,8 +3,9 @@ from map import *
 from tank import *
 
 class Round():
-    def __init__(self, numPlayers):
-        self.numPlayers = numPlayers
+    def __init__(self, settings):
+        self.settings = settings
+        self.numPlayers = self.settings["NUM_PLAYERS"]
         self.isOver = False
         self.maze = Maze(10, 10)
         self.map = Map(self.maze, 1000, 1000)
@@ -16,6 +17,9 @@ class Round():
 
         # Initialize .projectiles
         self.projectiles = []
+
+        # Initialize .mapCellSize (a setting variable, for streamlining .updateProjectiles())
+        self.mapCellSize = self.settings["MAPCELL_SIZE"]
 
     def controlTank(self, tankIndex, binding, keyStatus):
 
@@ -42,3 +46,20 @@ class Round():
                 self.tanks[tankIndex].stopSteeringLeft()
             if binding == "right":
                 self.tanks[tankIndex].stopSteeringRight()
+
+    def updateProjectiles(self):
+        for i in range(len(self.projectiles)):
+            row = int(self.projectiles[i].x // self.mapCellSize)
+            col = int(self.projectiles[i].y // self.mapCellSize)
+            print(row, col)
+            # Temp
+            if not ((0 < row < 10) and (0 < col < 10)):
+                continue
+
+            currentMapCell = self.map.getMapCell(row, col)
+            self.projectiles[i].setCurrentCell(currentMapCell)
+            print("check")
+            self.projectiles[i].move()
+
+    def printDebugInfo(self):
+        print("All MapCells and linked Walls:")

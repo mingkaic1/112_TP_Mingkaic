@@ -47,6 +47,9 @@ def gameMode_timerFired(app):
     for i in range(len(app.game.round.tanks)):
         app.game.round.tanks[i].update()
 
+    # Update Projectiles
+    app.game.round.updateProjectiles()
+
 def gameMode_keyPressed(app, event):
 
     # Check if event.key controls tank; if so, make the control
