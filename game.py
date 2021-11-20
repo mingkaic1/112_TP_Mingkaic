@@ -19,8 +19,10 @@ class Game():
         }
     }
 
-    def __init__(self, numPlayers = 2):
-        self.numPlayers = numPlayers
+    def __init__(self, settings):
+        self.settings = settings
+
+        self.numPlayers = settings["NUM_PLAYERS"]
 
         # Initialize score
         self.scores = {}
@@ -30,7 +32,7 @@ class Game():
         # Initialize controls
         self.controls = {}
         for i in range(self.numPlayers):
-            self.controls[i] = self.DEFAULT_CONTROLS[i]
+            self.controls[i] = self.settings["DEFAULT_CONTROLS"][i]
 
         # Initialize round number
         self.roundNum = 0

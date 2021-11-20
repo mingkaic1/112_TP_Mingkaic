@@ -7,9 +7,9 @@ from obstacles import *
 from fpsmeter import *
 from round import *
 from game import *
+from settings import *
 
-
-WIDTH = 1000
+WIDTH = 1200
 HEIGHT = 1000
 TARGET_FPS = 100
 
@@ -26,10 +26,8 @@ def appStarted(app):
     app.fpsMeter = FPSmeter()
 
     # Initialize Game object
-    app.game = Game()
+    app.game = Game(settings)
     app.game.startRound()
-
-    print(app.game.controls)
 
 # --------------------
 # GAME MODE
@@ -38,19 +36,16 @@ def appStarted(app):
 def gameMode_timerFired(app):
     app.framesElapsed += 1
 
-    # FPSmeter
+    # Update FPSmeter
     app.fpsMeter.addFrame()
-    # print(f"FPS: {app.fpsMeter.getFPS()}")
 
-    # Start new round
+    # Start new round if necessary
     if (app.game.round == None) or (app.game.round.isOver == True):
         app.game.startRound()
 
     # Update Tanks
     for i in range(len(app.game.round.tanks)):
         app.game.round.tanks[i].update()
-
-    print(app.game.round.projectiles)
 
 def gameMode_keyPressed(app, event):
 
@@ -69,6 +64,7 @@ def gameMode_redrawAll(app, canvas):
     drawWalls(app, canvas)
     drawTanks(app, canvas)
     drawProjectiles(app, canvas)
+    drawFPS(app, canvas)
 
 def drawWalls(app, canvas):
     for wall in app.game.round.map.wallRectangles:
@@ -87,5 +83,8 @@ def drawProjectiles(app, canvas):
                            projectile.x + projectile.r,
                            projectile.y + projectile.r,
                            fill = "black")
+
+def drawFPS(app, canvas):
+    canvas.create_text(5, 5, text = f"{round(app.fpsMeter.getFPS())}", anchor = "nw")
 
 runApp(width = WIDTH, height = HEIGHT)
