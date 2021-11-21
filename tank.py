@@ -5,7 +5,7 @@ class Tank():
 
     SIZE = 20
     speed = 6
-    D_THETA = 8
+    D_THETA = 5
     STARTING_AMMO = 1000
     MAX_AMMO = 5
 
@@ -200,7 +200,9 @@ class Tank():
         if self.ammo <= 0:
             return None
         self.ammo -= 1
-        return Bullet(self.x, self.y, self.theta)
+        # return Bullet(self.x, self.y, self.theta)
+        return Bullet(self.x - (self.length/2)*math.sin(math.radians(self.theta)),
+                      self.y - (self.length/2)*math.cos(math.radians(self.theta)), self.theta)
 
     def replenishAmmo(self, amount = 1):
         self.ammo += amount

@@ -105,4 +105,28 @@ class Round():
     # Check whether any projectile hits any tank; if so, remove the projectile and tank.
     # If only 1 tank is remaining (i.e. wins round), return tank.id
     def checkHits(self):
-        pass
+        # TEMP: Really basic hit detection right now. TO CHANGE
+        i = 0
+        while i < len(self.tanks):
+            isHitDetected = False
+            j = 0
+            while j < len(self.projectiles):
+                # If Tank and Projectile hit (within a certain Pythagorean distance)
+                if (((self.tanks[i].x - self.projectiles[j].x) ** 2 + (self.tanks[i].y - self.projectiles[j].y) ** 2) ** 0.5 < self.settings["TANK_SIZE"] / 2):
+                    self.tanks.pop(i)
+                    self.projectiles.pop(j)
+                    isHitDetected = True
+                    break
+                j += 1
+            if isHitDetected == False:
+                i += 1
+            isHitDetected = False
+
+        # Check win/draw conditions
+        if len(self.tanks) == 1:
+            return self.tanks[0].id
+        elif len(self.tanks) == 0:
+            pass # DRAW - how to handle this?
+
+
+

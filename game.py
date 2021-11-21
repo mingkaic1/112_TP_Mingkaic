@@ -45,6 +45,9 @@ class Game():
         self.roundNum += 1
         print(f"Game: Round {self.roundNum} started!")
 
+        # TEMP
+        print(self.scores)
+
     def checkKeyPressed(self, key):
         for i in self.controls:
             for binding in self.controls[i]:
