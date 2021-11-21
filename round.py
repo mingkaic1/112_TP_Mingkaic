@@ -20,7 +20,7 @@ class Round():
             self.tanks.append(Tank(self.settings["TANK_SIZE"],
                                    self.settings["TANK_PROPORTION"],
                                    self.settings["TANK_SPEED"],
-                                   150, 150))
+                                   i, 150, 150, ))
 
         # Initialize .projectiles
         self.projectiles = []
@@ -102,6 +102,7 @@ class Round():
             result.append(translatedCorners)
         return result
 
-
-    def printDebugInfo(self):
-        print("All MapCells and linked Walls:")
+    # Check whether any projectile hits any tank; if so, remove the projectile and tank.
+    # If only 1 tank is remaining (i.e. wins round), return tank.id
+    def checkHits(self):
+        pass

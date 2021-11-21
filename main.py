@@ -49,6 +49,9 @@ def gameMode_timerFired(app):
     # Update Projectiles
     app.game.round.updateProjectiles()
 
+    # Check if any tank is hit (and if the round is over)
+    app.game.checkHits()
+
 def gameMode_keyPressed(app, event):
 
     # Check if event.key controls tank; if so, make the control

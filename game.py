@@ -58,3 +58,10 @@ class Game():
                 if key == self.controls[i][binding]:
                     self.round.controlTank(i, binding, "released")
                     return
+
+    def checkHits(self):
+        result = self.round.checkHits()
+        # If there is 1 Tank remaining after hits (round.checkHits() returns Tank.id)
+        if result != None:
+            self.scores[result] += 1
+            self.round.isOver = True
