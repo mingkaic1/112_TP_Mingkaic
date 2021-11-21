@@ -72,7 +72,6 @@ def keyPressed(app, event):
             output.currentMapCell = app.dummyMapCell
             app.bullets.append(output)
 
-
 def keyReleased(app, event):
     # Steering
     if (event.key == "Left"):

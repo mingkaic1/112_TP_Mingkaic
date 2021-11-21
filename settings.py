@@ -26,5 +26,6 @@ settings = {
     "BULLET_RADIUS": 4,
     "NUM_ROWS": 7,
     "NUM_COLS": 10,
-    "MARGIN": 100 # Adjust to center map
+    "MARGIN": 100, # Adjust to center map
+    "TANK_SPEED": 3
 }

@@ -9,10 +9,11 @@ class Tank():
     STARTING_AMMO = 1000
     MAX_AMMO = 5
 
-    def __init__(self, x = 0, y = 0):
+    def __init__(self, size, proportion, speed, x = 0, y = 0, ):
         self.x, self.y = x, y
-        self.length = self.SIZE
-        self.width = self.length * 0.75
+        self.length = size
+        self.width = self.length * proportion
+        self.speed = speed
         self.theta = 0 # Facing angle in degrees from North
 
         # Init steering & movement booleans

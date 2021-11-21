@@ -1,6 +1,7 @@
 from maze import *
 from map import *
 from tank import *
+from graph import *
 
 class Round():
     def __init__(self, settings):
@@ -9,17 +10,29 @@ class Round():
         self.isOver = False
         self.maze = Maze(self.settings["NUM_ROWS"], self.settings["NUM_COLS"])
         self.map = Map(self.maze, self.settings)
+        self.graph = Graph(self.maze)
+
+        print(self.graph.graphDict)
 
         # Initialize .tanks and Tank objects
         self.tanks = []
         for i in range(self.numPlayers):
-            self.tanks.append(Tank(100, 100))
+            self.tanks.append(Tank(self.settings["TANK_SIZE"],
+                                   self.settings["TANK_PROPORTION"],
+                                   self.settings["TANK_SPEED"],
+                                   150, 150))
 
         # Initialize .projectiles
         self.projectiles = []
 
         # Initialize .mapCellSize (a setting variable, for streamlining .updateProjectiles())
         self.mapCellSize = self.settings["MAPCELL_SIZE"]
+
+
+        print("path finding start")
+        print(self.graph.findPathDijkstra((0, 0), (5, 5)))
+        print("path finding done")
+
 
     def controlTank(self, tankIndex, binding, keyStatus):
 
@@ -67,7 +80,6 @@ class Round():
                     if (rowToAdd in range(0, self.map.numRows)) and (colToAdd in range(0, self.map.numCols)):
                         currentMapCells.append(self.map.getMapCell(rowToAdd, colToAdd))
             self.tanks[i].setCurrentMapCells(currentMapCells)
-            print(self.tanks[i].currentMapCells)
             self.tanks[i].update()
 
     def getProjectilesTranslatedCoordinates(self):
