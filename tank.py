@@ -4,7 +4,7 @@ from projectiles import *
 class Tank():
 
     SIZE = 20
-    SPEED = 6
+    speed = 6
     D_THETA = 8
     STARTING_AMMO = 1000
     MAX_AMMO = 5
@@ -90,32 +90,32 @@ class Tank():
         #     while down-most point is below
         if ((yMin < wall.y2) and
             (yMax > wall.y2) and not
-            ((xMax < wall.x1) or (xMin > wall.x2))):
-            self.y += (wall.y2 - yMin)
+            ((xMax < wall.x1 + 2) or (xMin > wall.x2 - 2))):
+            self.y += (wall.y2 - yMin + 1)
             self.updateCorners()
             xMin, xMax, yMin, yMax = self.getMinMaxXY()
 
         # Check for collision on TOP surface of Wall
         if ((yMax > wall.y1) and
             (yMin < wall.y1) and not
-            ((xMax < wall.x1) or (xMin > wall.x2))):
-            self.y -= (yMax - wall.y1)
+            ((xMax < wall.x1 + 2) or (xMin > wall.x2 - 2))):
+            self.y -= (yMax - wall.y1 + 1)
             self.updateCorners()
             xMin, xMax, yMin, yMax = self.getMinMaxXY()
 
         # Check for collision on RIGHT surface of Wall
         if ((xMin < wall.x2) and
             (xMax > wall.x2) and not
-            ((yMax < wall.y1) or (yMin > wall.y2))):
-            self.x += (wall.x2 - xMin)
+            ((yMax < wall.y1 + 2) or (yMin > wall.y2 - 2))):
+            self.x += (wall.x2 - xMin + 1)
             self.updateCorners()
             xMin, xMax, yMin, yMax = self.getMinMaxXY()
 
         # Check for collision on BOTTOM surface of Wall
         if ((xMax > wall.x1) and
             (xMin < wall.x1) and not
-            ((yMax < wall.y1) or (yMin > wall.y2))):
-            self.x -= (xMax - wall.x1)
+            ((yMax < wall.y1 + 2) or (yMin > wall.y2 - 2))):
+            self.x -= (xMax - wall.x1 + 1)
             self.updateCorners()
             xMin, xMax, yMin, yMax = self.getMinMaxXY()
 
@@ -170,14 +170,14 @@ class Tank():
     def moveForward(self):
         self.sin = math.sin(math.radians(self.theta))
         self.cos = math.cos(math.radians(self.theta))
-        self.x -= self.SPEED * self.sin
-        self.y -= self.SPEED * self.cos
+        self.x -= self.speed * self.sin
+        self.y -= self.speed * self.cos
 
     def moveBackward(self):
         self.sin = math.sin(math.radians(self.theta))
         self.cos = math.cos(math.radians(self.theta))
-        self.x += self.SPEED * self.sin
-        self.y += self.SPEED * self.cos
+        self.x += self.speed * self.sin
+        self.y += self.speed * self.cos
 
     def startMovingForward(self):
         self.isMovingForward = True
