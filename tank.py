@@ -204,7 +204,8 @@ class Tank():
         return Bullet(self.x - (self.length/2)*math.sin(math.radians(self.theta)),
                       self.y - (self.length/2)*math.cos(math.radians(self.theta)),
                       self.theta,
-                      self.settings["PROJECTILE_LIFETIME_FRAMES"])
+                      self.settings["PROJECTILE_LIFETIME_FRAMES"],
+                      self.id)
 
     def replenishAmmo(self, amount = 1):
         self.ammo += amount

@@ -5,7 +5,7 @@ class Projectile():
     SPEED = 4
     RADIUS = 2
 
-    def __init__(self, x, y, theta, lifetimeFrames): # 'theta' is angle in degrees from North
+    def __init__(self, x, y, theta, lifetimeFrames, tankID): # 'theta' is angle in degrees from North
 
         # Initialize position
         self.x = x
@@ -22,6 +22,9 @@ class Projectile():
         # Initialize despawn countdown
         self.framesLeft = lifetimeFrames
         self.isDespawned = False
+
+        # Save the id of Tank which fired it
+        self.tankID = tankID
 
         # Initialize .currentMapCell
         #   - Stores the MapCell object on which the projectile is currently located
@@ -106,5 +109,5 @@ class Projectile():
             self.isDespawned = True
 
 class Bullet(Projectile):
-    def __init__(self, x, y, theta, lifetimeFrames):
-        super().__init__(x, y, theta, lifetimeFrames)
+    def __init__(self, x, y, theta, lifetimeFrames, tankID):
+        super().__init__(x, y, theta, lifetimeFrames, tankID)

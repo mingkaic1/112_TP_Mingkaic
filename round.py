@@ -94,12 +94,20 @@ class Round():
                 self.tanks[tankIndex].stopSteeringRight()
 
     def updateProjectiles(self):
-        for i in range(len(self.projectiles)):
+        i = 0
+        while i < len(self.projectiles):
             row = int(self.projectiles[i].y // self.mapCellSize)
             col = int(self.projectiles[i].x // self.mapCellSize)
             currentMapCell = self.map.getMapCell(row, col)
             self.projectiles[i].setCurrentCell(currentMapCell)
             self.projectiles[i].move()
+            if (self.projectiles[i].framesLeft <= 0):
+                # Replenish the correct Tank's ammo by 1
+                self.tanks[self.projectiles[i].tankID].replenishAmmo()
+                # Remove Projectile from list
+                self.projectiles.pop(i)
+            else:
+                i += 1
 
     def updateTanks(self):
         for i in range(len(self.tanks)):
