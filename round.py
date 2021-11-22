@@ -1,3 +1,5 @@
+import random
+
 from maze import *
 from map import *
 from tank import *
@@ -14,13 +16,8 @@ class Round():
 
         print(self.graph.graphDict)
 
-        # Initialize .tanks and Tank objects
-        self.tanks = []
-        for i in range(self.numPlayers):
-            self.tanks.append(Tank(self.settings["TANK_SIZE"],
-                                   self.settings["TANK_PROPORTION"],
-                                   self.settings["TANK_SPEED"],
-                                   i, 150, 150, ))
+        # Randomize tank starting locations and directions, and initialize .tank objects
+        self.initTanks()
 
         # Initialize .projectiles
         self.projectiles = []
@@ -33,6 +30,42 @@ class Round():
         print(self.graph.findPathDijkstra((0, 0), (5, 5)))
         print("path finding done")
 
+    def initTanks(self):
+        # Keep on generating new combinations of starting positions, until a valid one is found
+        while True:
+            tankStartingPositions = []  # List of 3-tuples, each representing (row, col, theta)
+            isValid = True
+            for i in range(self.numPlayers):
+                startingRow = random.randint(0, self.settings["NUM_ROWS"] - 1)
+                startingCol = random.randint(0, self.settings["NUM_COLS"] - 1)
+                tankStartingPositions.append((startingRow, startingCol))
+                startingAngle = random.randint(0, 359)
+                # Check if the starting position is far enough away from other tanks' starting positions
+                for j in range(i):
+                    if (self.getManhattanSeparation(tankStartingPositions[i],
+                                                    tankStartingPositions[j]) <
+                        self.settings["MIN_STARTING_MANHATTAN_SEPARATION_RATIO"] *
+                        min([self.settings["NUM_ROWS"], self.settings["NUM_COLS"]])):
+                        isValid = False
+            if (isValid == True):
+                break
+        # Make random list of starting angles
+        tankStartingAngles = [random.randint(0, 359) for i in range(self.numPlayers)]
+        # Initialize .tank objects
+        self.tanks = []
+        for id in range(self.numPlayers):
+            startingX = (tankStartingPositions[id][1] + 0.5) * self.settings["MAPCELL_SIZE"]
+            startingY = (tankStartingPositions[id][0] + 0.5) * self.settings["MAPCELL_SIZE"]
+            startingTheta = tankStartingAngles[id]
+            self.tanks.append(Tank(self.settings,
+                                   id,
+                                   startingX,
+                                   startingY,
+                                   startingTheta))
+
+    # HELPER FUNCTION
+    def getManhattanSeparation(self, position1, position2):
+        return abs(position1[0] - position2[0]) + abs(position1[1] - position1[1])
 
     def controlTank(self, tankIndex, binding, keyStatus):
 

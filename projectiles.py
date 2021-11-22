@@ -4,9 +4,8 @@ class Projectile():
 
     SPEED = 4
     RADIUS = 2
-    LIFETIME_FRAMES = 50
 
-    def __init__(self, x, y, theta): # 'theta' is angle in degrees from North
+    def __init__(self, x, y, theta, lifetimeFrames): # 'theta' is angle in degrees from North
 
         # Initialize position
         self.x = x
@@ -21,7 +20,7 @@ class Projectile():
         self.r = self.RADIUS
 
         # Initialize despawn countdown
-        self.framesLeft = self.LIFETIME_FRAMES
+        self.framesLeft = lifetimeFrames
         self.isDespawned = False
 
         # Initialize .currentMapCell
@@ -107,5 +106,5 @@ class Projectile():
             self.isDespawned = True
 
 class Bullet(Projectile):
-    def __init__(self, x, y, theta):
-        super().__init__(x, y, theta)
+    def __init__(self, x, y, theta, lifetimeFrames):
+        super().__init__(x, y, theta, lifetimeFrames)

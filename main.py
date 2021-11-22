@@ -70,6 +70,7 @@ def gameMode_redrawAll(app, canvas):
     drawTanks(app, canvas)
     drawProjectiles(app, canvas)
     drawFPS(app, canvas)
+    drawScores(app, canvas)
 
 # --------------------
 # DRAWING HELPER FUNCTIONS
@@ -83,7 +84,7 @@ def drawTanks(app, canvas):
     # Get list of lists, each containing 4 tuples representing corners of tank polygon
     tanksTranslatedCorners = app.game.round.getTanksTranslatedCorners()
     for i in range(len(tanksTranslatedCorners)):
-        canvas.create_polygon(tanksTranslatedCorners[i])
+        canvas.create_polygon(tanksTranslatedCorners[i], fill = app.game.settings["PLAYER_COLORS"][i])
 
 def drawProjectiles(app, canvas):
     # Get list of tuples, each representing 4 canvas coordinates of circle
@@ -94,4 +95,9 @@ def drawProjectiles(app, canvas):
 def drawFPS(app, canvas):
     canvas.create_text(5, 5, text = f"{round(app.fpsMeter.getFPS())}", anchor = "nw")
 
+def drawScores(app, canvas):
+    # 2 Players
+    if app.game.settings["MODE"] == "pvp":
+        canvas.create_text(400, 900, font = "Arial 80 bold", fill = app.game.settings["PLAYER_COLORS"][0], text = f"{app.game.scores[0]}")
+        canvas.create_text(800, 900, font = "Arial 80 bold", fill = app.game.settings["PLAYER_COLORS"][1], text = f"{app.game.scores[1]}")
 runApp(width = WIDTH, height = HEIGHT)

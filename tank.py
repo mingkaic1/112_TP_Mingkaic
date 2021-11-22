@@ -6,15 +6,14 @@ class Tank():
     SIZE = 20
     speed = 6
     D_THETA = 5
-    STARTING_AMMO = 1000
-    MAX_AMMO = 5
 
-    def __init__(self, size, proportion, speed, id, x = 0, y = 0):
+    def __init__(self, settings, id, x = 0, y = 0, theta = 0):
+        self.settings = settings
         self.x, self.y = x, y
-        self.length = size
-        self.width = self.length * proportion
-        self.speed = speed
-        self.theta = 0 # Facing angle in degrees from North
+        self.length = self.settings["TANK_SIZE"]
+        self.width = self.length * self.settings["TANK_PROPORTION"]
+        self.speed = self.settings["TANK_SPEED"]
+        self.theta = theta # Facing angle in degrees from North
         self.id = id
 
         # Init steering & movement booleans
@@ -24,7 +23,8 @@ class Tank():
         self.isMovingBackward = False
 
         # Init ammo counter
-        self.ammo = self.STARTING_AMMO
+        self.ammo = self.settings["TANK_STARTING_AMMO"]
+        self.maxAmmo = self.settings["TANK_MAX_AMMO"]
 
         # Initialize .currentMapCells (list of 9 MapCell objects centered around Tank)
         self.currentMapCells = []
@@ -202,9 +202,11 @@ class Tank():
         self.ammo -= 1
         # return Bullet(self.x, self.y, self.theta)
         return Bullet(self.x - (self.length/2)*math.sin(math.radians(self.theta)),
-                      self.y - (self.length/2)*math.cos(math.radians(self.theta)), self.theta)
+                      self.y - (self.length/2)*math.cos(math.radians(self.theta)),
+                      self.theta,
+                      self.settings["PROJECTILE_LIFETIME_FRAMES"])
 
     def replenishAmmo(self, amount = 1):
         self.ammo += amount
-        if (self.ammo > self.MAX_AMMO):
-            self.ammo = self.MAX_AMMO
+        if (self.ammo > self.maxAmmo):
+            self.ammo = self.maxAmmo
