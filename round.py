@@ -43,7 +43,6 @@ class Round():
                 startingRow = random.randint(0, self.settings["NUM_ROWS"] - 1)
                 startingCol = random.randint(0, self.settings["NUM_COLS"] - 1)
                 tankStartingPositions.append((startingRow, startingCol))
-                startingAngle = random.randint(0, 359)
                 # Check if the starting position is far enough away from other tanks' starting positions
                 for j in range(i):
                     if (self.getManhattanSeparation(tankStartingPositions[i],
@@ -54,7 +53,8 @@ class Round():
             if (isValid == True):
                 break
         # Make random list of starting angles
-        tankStartingAngles = [random.randint(0, 359) for i in range(self.numPlayers + self.numAI)]
+        #   - Round each starting angle to nearest D_THETA
+        tankStartingAngles = [self.roundToNearest(random.randint(0, 359), self.settings["D_THETA"]) for i in range(self.numPlayers + self.numAI)]
         # Initialize .tank objects
         self.tanks = []
         for id in range(self.numPlayers + self.numAI):
@@ -76,6 +76,10 @@ class Round():
     # HELPER FUNCTION
     def getManhattanSeparation(self, position1, position2):
         return abs(position1[0] - position2[0]) + abs(position1[1] - position1[1])
+
+    # HELPER FUNCTION
+    def roundToNearest(self, value, d):
+        return (value // d) * d
 
     def controlTank(self, tankIndex, binding, keyStatus):
 

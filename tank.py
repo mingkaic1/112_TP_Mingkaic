@@ -3,10 +3,6 @@ from projectiles import *
 
 class Tank():
 
-    SIZE = 20
-    speed = 6
-    D_THETA = 5
-
     def __init__(self, settings, id, x = 0, y = 0, theta = 0):
         self.settings = settings
         self.x, self.y = x, y
@@ -14,6 +10,7 @@ class Tank():
         self.width = self.length * self.settings["TANK_PROPORTION"]
         self.speed = self.settings["TANK_SPEED"]
         self.theta = theta # Facing angle in degrees from North
+        self.dTheta = self.settings["D_THETA"]
         self.id = id
 
         # Init steering & movement booleans
@@ -150,10 +147,10 @@ class Tank():
     # Steering
 
     def steerLeft(self):
-        self.theta += self.D_THETA
+        self.theta += self.dTheta
 
     def steerRight(self):
-        self.theta -= self.D_THETA
+        self.theta -= self.dTheta
 
     def startSteeringLeft(self):
         self.isSteeringLeft = True

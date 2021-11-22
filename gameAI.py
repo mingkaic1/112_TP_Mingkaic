@@ -7,9 +7,38 @@ class GameAI():
         #   - .path stores the MapCell path to nearest Tank
         #   - .route stores the x, y conversion of path
         #   - .targetTank is the Tank that AI is targeting
+        self.path = None
         self.getNewPath()
 
     def update(self):
+        if self.path != None:
+            # If .targetTank is not yet within line-of-sight
+            if self.inLineOfSight() == False:
+                self.moveTowardTargetTank()
+            # If .targetTank is within line-of-sight
+            else:
+                self.shootAtTargetTank()
+
+    # Check if .targetTank is within line of sight (and hence AI can begin shooting)
+    #   - Currently implemented naively (checking if .path is a straight line of nodes)
+    #   - Better way: Linear algebra (vector/line segment to .targetTank, and check if it intersects any Wall)
+    def inLineOfSight(self):
+        isInSameRow = True
+        isInSameCol = True
+        for i in range(len(self.path) - 1):
+            if (self.path[i][0] != self.path[i + 1][0]):
+                isInSameRow = False
+            if (self.path[i][1] != self.path[i + 1][1]):
+                isInSameCol = False
+        if (isInSameRow == True) or (isInSameCol == True):
+            return True
+        return False
+
+
+    def moveTowardTargetTank(self):
+        print(self.tank.theta)
+
+    def shootAtTargetTank(self):
         pass
 
     # Get new path by calling pathfinding algorithms in .round.graph

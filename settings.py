@@ -1,6 +1,6 @@
 settings = {
     "NUM_PLAYERS": 2,
-    "NUM_AI": 0,
+    "NUM_AI": 1,
     "DEFAULT_CONTROLS": {
         1: {
             "forward": "Up",
@@ -42,5 +42,6 @@ settings = {
     "MIN_STARTING_MANHATTAN_SEPARATION_RATIO": 0.1, # E.g. If NUM_COLS = 10, Tanks' starting positions must be at least 0.7*10 = 7 cells apart (Manhattan distance)
     "TANK_STARTING_AMMO": 5,
     "TANK_MAX_AMMO": 5,
-    "PROJECTILE_LIFETIME_FRAMES": 400
+    "PROJECTILE_LIFETIME_FRAMES": 400,
+    "D_THETA": 5
 }
