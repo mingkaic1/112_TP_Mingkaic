@@ -1,6 +1,6 @@
 settings = {
     "NUM_PLAYERS": 2,
-    "NUM_AI": 1,
+    "NUM_AI": 0,
     "DEFAULT_CONTROLS": {
         1: {
             "forward": "Up",

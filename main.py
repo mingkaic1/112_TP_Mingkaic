@@ -46,6 +46,9 @@ def gameMode_timerFired(app):
     # Update Tanks
     app.game.round.updateTanks()
 
+    # Update GameAIs
+    app.game.round.updateGameAIs()
+
     # Update Projectiles
     app.game.round.updateProjectiles()
 

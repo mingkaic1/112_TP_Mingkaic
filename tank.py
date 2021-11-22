@@ -29,6 +29,9 @@ class Tank():
         # Initialize .currentMapCells (list of 9 MapCell objects centered around Tank)
         self.currentMapCells = []
 
+        # Initialize .centralMapCell (single MapCell on which Tank is located)
+        self.centralMapCell = None
+
         # Initialize .corners
         self.corners = []
         self.updateCorners()
@@ -66,6 +69,9 @@ class Tank():
 
     def setCurrentMapCells(self, mapCells):
         self.currentMapCells = mapCells
+
+    def setCentralMapCell(self, mapCell):
+        self.centralMapCell = mapCell
 
     # Update
     def update(self):

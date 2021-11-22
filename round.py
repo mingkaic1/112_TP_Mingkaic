@@ -4,6 +4,7 @@ from maze import *
 from map import *
 from tank import *
 from graph import *
+from gameAI import *
 
 class Round():
     def __init__(self, settings):
@@ -17,6 +18,10 @@ class Round():
 
         # Randomize tank starting locations and directions, and initialize .tank objects
         self.initTanks()
+
+        # Initialize .gameAIs
+        #   - Do this after .initTanks() as each GameAI object takes in a Tank object in __init__
+        self.initGameAIs()
 
         # Initialize .projectiles
         self.projectiles = []
@@ -61,6 +66,12 @@ class Round():
                                    startingX,
                                    startingY,
                                    startingTheta))
+
+    def initGameAIs(self):
+        self.gameAIs = []
+        for i in range(self.settings["NUM_AI"]):
+            tankID = i + self.settings["NUM_PLAYERS"]
+            self.gameAIs.append(GameAI(self.tanks[tankID], self))
 
     # HELPER FUNCTION
     def getManhattanSeparation(self, position1, position2):
@@ -126,8 +137,19 @@ class Round():
                     colToAdd = col + dCol
                     if (rowToAdd in range(0, self.map.numRows)) and (colToAdd in range(0, self.map.numCols)):
                         currentMapCells.append(self.map.getMapCell(rowToAdd, colToAdd))
+                    if (dRow == 0) and (dCol == 0):
+                        centralMapCell = self.map.getMapCell(rowToAdd, colToAdd)
             self.tanks[i].setCurrentMapCells(currentMapCells)
+            self.tanks[i].setCentralMapCell(centralMapCell)
             self.tanks[i].update()
+
+    def updateGameAIs(self):
+        for i in range(len(self.gameAIs)):
+            # Skip if Tank controlled by GameAI is dead
+            if self.gameAIs[i].tank.isAlive == False:
+                continue
+            self.gameAIs[i].getNewPath() # TO DO: Only do this when a player tank has changed its currentMapCells (otherwise, each frame will run
+            self.gameAIs[i].update()
 
     def getProjectilesTranslatedCoordinates(self):
         result = []

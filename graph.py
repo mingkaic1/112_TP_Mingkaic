@@ -16,6 +16,10 @@ class Graph():
                 if (cell.walls[3] == False):
                     self.graphDict[(row, col)] = self.graphDict.get((row, col), []) + [(row, col + 1)]
 
+    def findPath(self, startNode, endNode, algorithmNum = 0):
+        if algorithmNum == 0:
+            return self.findPathDijkstra(startNode, endNode)
+
     def findPathDijkstra(self, startNode, endNode):
         priorityQueue = PriorityQueue()
         currentNode = startNode
