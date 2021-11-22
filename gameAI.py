@@ -1,3 +1,5 @@
+import math
+
 class GameAI():
     def __init__(self, tank, round):
         self.tank = tank
@@ -10,7 +12,7 @@ class GameAI():
         self.path = None
         self.getNewPath()
 
-        self.isMoving = False
+        self.isInitialSteeringDone = False
 
     def update(self):
         if self.path != None:
@@ -38,7 +40,8 @@ class GameAI():
 
     def moveTowardTargetTank(self):
         self.steer()
-        self.move()
+        if (self.isInitialSteeringDone == True):
+            self.tank.startMovingForward()
 
     def steer(self):
         angleToNextNode = self.getAngleToNextNode()
@@ -48,6 +51,7 @@ class GameAI():
         # If AI is facing next node
         else:
             self.stopRotation()
+            self.isInitialSteeringDone = True
 
     def rotateToAngle(self, targetAngle):
         # Find the difference in angle to turn through (ensure within -180 to 180)
@@ -56,7 +60,6 @@ class GameAI():
             dAngle += 360
         while dAngle > 180:
             dAngle -= 360
-        print(dAngle)
         # If faster to turn counterclockwise
         if (dAngle > 0):
             self.tank.startSteeringLeft()
@@ -104,17 +107,32 @@ class GameAI():
                 angleToNextNode = 180
         return angleToNextNode
 
-    def move(self):
-        angleToNextNode = self.getAngleToNextNode()
-        if (self.constrainAngle(self.tank.theta) == angleToNextNode):
-            self.tank.startMovingForward()
-
     def shootAtTargetTank(self):
-        pass
+        self.tank.stopMovingForward()
+        angleToTarget = self.getAngleToTarget()
+        print(angleToTarget, self.constrainAngle(self.tank.theta))
+        # If AI is currently facing/aiming at .targetTank
+        if self.constrainAngle(self.tank.theta) == angleToTarget:
+            self.tank.fire()
+        # If AI is not facing/aiming at .targetTank (needs to rotate)
+        else:
+            self.rotateToAngle(angleToTarget)
+
+    # HELPER FUNCTION
+    # Get the angle that .targetTank is in relation to AI tank
+    def getAngleToTarget(self):
+        dX = self.targetTank.x - self.tank.x
+        dY = self.tank.y - self.targetTank.y
+        atan2Angle = math.degrees(math.atan2(dX, dY)) # Angle from positive-x axis
+        angleToTarget = self.roundToNearest(self.constrainAngle(360 - atan2Angle), self.round.settings["D_THETA"])
+        return angleToTarget
+
+    # HELPER FUNCTION
+    def roundToNearest(self, value, d):
+        return round((value // d) * d)
 
     # Get new path by calling pathfinding algorithms in .round.graph
     def getNewPath(self):
-        print("getting new path")
         # Find the nearest Tank to target
         minDistance = float("inf")
         for i in range(self.round.settings["NUM_PLAYERS"]):
@@ -130,7 +148,6 @@ class GameAI():
             selfNode = (self.tank.centralMapCell.row, self.tank.centralMapCell.col)
             targetNode = (self.targetTank.centralMapCell.row, self.targetTank.centralMapCell.col)
             self.path = self.round.graph.findPath(selfNode, targetNode)
-            print(self.path)
 
     # HELPER FUNCTION
     def getPythagoreanDistance(self, point1, point2):

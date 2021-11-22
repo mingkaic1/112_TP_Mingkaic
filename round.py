@@ -79,7 +79,7 @@ class Round():
 
     # HELPER FUNCTION
     def roundToNearest(self, value, d):
-        return (value // d) * d
+        return int((value // d) * d)
 
     def controlTank(self, tankIndex, binding, keyStatus):
 

@@ -43,11 +43,11 @@ def gameMode_timerFired(app):
     if (app.game.round == None) or (app.game.round.isOver == True):
         app.game.startRound()
 
-    # Update Tanks
-    app.game.round.updateTanks()
-
     # Update GameAIs
     app.game.round.updateGameAIs()
+
+    # Update Tanks
+    app.game.round.updateTanks()
 
     # Update Projectiles
     app.game.round.updateProjectiles()
