@@ -9,12 +9,11 @@ class Round():
     def __init__(self, settings):
         self.settings = settings
         self.numPlayers = self.settings["NUM_PLAYERS"]
+        self.numAI = self.settings["NUM_AI"]
         self.isOver = False
         self.maze = Maze(self.settings["NUM_ROWS"], self.settings["NUM_COLS"])
         self.map = Map(self.maze, self.settings)
         self.graph = Graph(self.maze)
-
-        print(self.graph.graphDict)
 
         # Randomize tank starting locations and directions, and initialize .tank objects
         self.initTanks()
@@ -35,7 +34,7 @@ class Round():
         while True:
             tankStartingPositions = []  # List of 3-tuples, each representing (row, col, theta)
             isValid = True
-            for i in range(self.numPlayers):
+            for i in range(self.numPlayers + self.numAI):
                 startingRow = random.randint(0, self.settings["NUM_ROWS"] - 1)
                 startingCol = random.randint(0, self.settings["NUM_COLS"] - 1)
                 tankStartingPositions.append((startingRow, startingCol))
@@ -50,10 +49,10 @@ class Round():
             if (isValid == True):
                 break
         # Make random list of starting angles
-        tankStartingAngles = [random.randint(0, 359) for i in range(self.numPlayers)]
+        tankStartingAngles = [random.randint(0, 359) for i in range(self.numPlayers + self.numAI)]
         # Initialize .tank objects
         self.tanks = []
-        for id in range(self.numPlayers):
+        for id in range(self.numPlayers + self.numAI):
             startingX = (tankStartingPositions[id][1] + 0.5) * self.settings["MAPCELL_SIZE"]
             startingY = (tankStartingPositions[id][0] + 0.5) * self.settings["MAPCELL_SIZE"]
             startingTheta = tankStartingAngles[id]

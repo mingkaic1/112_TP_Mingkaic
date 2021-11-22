@@ -23,10 +23,11 @@ class Game():
         self.settings = settings
 
         self.numPlayers = settings["NUM_PLAYERS"]
+        self.numAI = settings["NUM_AI"]
 
         # Initialize score
         self.scores = {}
-        for i in range(self.numPlayers):
+        for i in range(self.numPlayers + self.numAI):
             self.scores[i] = 0
 
         # Initialize controls
@@ -44,9 +45,6 @@ class Game():
         self.round = Round(self.settings)
         self.roundNum += 1
         print(f"Game: Round {self.roundNum} started!")
-
-        # TEMP
-        print(self.scores)
 
     def checkKeyPressed(self, key):
         for i in self.controls:

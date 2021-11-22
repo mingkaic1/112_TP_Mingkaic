@@ -96,8 +96,9 @@ def drawFPS(app, canvas):
     canvas.create_text(5, 5, text = f"{round(app.fpsMeter.getFPS())}", anchor = "nw")
 
 def drawScores(app, canvas):
-    # 2 Players
-    if app.game.settings["MODE"] == "pvp":
-        canvas.create_text(400, 900, font = "Arial 80 bold", fill = app.game.settings["PLAYER_COLORS"][0], text = f"{app.game.scores[0]}")
-        canvas.create_text(800, 900, font = "Arial 80 bold", fill = app.game.settings["PLAYER_COLORS"][1], text = f"{app.game.scores[1]}")
+    xGap = app.game.settings["WINDOW_WIDTH"] // (app.game.settings["NUM_PLAYERS"] + app.game.settings["NUM_AI"] + 1)
+    x0 = (app.game.settings["WINDOW_WIDTH"] - (app.game.settings["NUM_PLAYERS"] + app.game.settings["NUM_AI"] - 1) * xGap) // 2
+    y = ((app.game.settings["MARGIN"] + app.game.settings["NUM_ROWS"] * app.game.settings["MAPCELL_SIZE"]) + app.game.settings["WINDOW_HEIGHT"]) // 2
+    for i in range(app.game.settings["NUM_PLAYERS"] + app.game.settings["NUM_AI"]):
+        canvas.create_text(x0 + i * xGap, y, font = "Arial 80 bold", fill = app.game.settings["PLAYER_COLORS"][i], text = f"{app.game.scores[i]}")
 runApp(width = WIDTH, height = HEIGHT)
