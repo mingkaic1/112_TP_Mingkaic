@@ -116,7 +116,6 @@ class GameAI():
             self.rotateToAngle(angleToTarget)
         # If AI is currently facing/aiming at .targetTank
         else:
-            print("fire!")
             projectile = self.tank.fire()
             if projectile != None:
                 self.round.projectiles.append(projectile)
@@ -139,6 +138,9 @@ class GameAI():
         # Find the nearest Tank to target
         minDistance = float("inf")
         for i in range(self.round.settings["NUM_PLAYERS"]):
+            # Skip if player Tank is already dead
+            if (self.round.tanks[i].isAlive == False):
+                continue
             tankX = self.round.tanks[i].x
             tankY = self.round.tanks[i].y
             distance = self.getPythagoreanDistance((tankX, tankY), (self.tank.x, self.tank.y))

@@ -185,15 +185,18 @@ class Round():
         i = 0
         while i < len(self.tanks):
             isHitDetected = False
-            j = 0
-            while j < len(self.projectiles):
-                # If Tank and Projectile hit (within a certain Pythagorean distance)
-                if (((self.tanks[i].x - self.projectiles[j].x) ** 2 + (self.tanks[i].y - self.projectiles[j].y) ** 2) ** 0.5 < self.settings["TANK_SIZE"] / 2):
-                    self.tanks[i].die()
-                    self.projectiles.pop(j)
-                    isHitDetected = True
-                    break
-                j += 1
+            # Skip if tank is already dead
+            if (self.tanks[i].isAlive == True):
+                j = 0
+                while j < len(self.projectiles):
+                    # If Tank and Projectile hit (within a certain Pythagorean distance)
+                    if (((self.tanks[i].x - self.projectiles[j].x) ** 2 + (self.tanks[i].y - self.projectiles[j].y) ** 2) ** 0.5 < self.settings["TANK_SIZE"] / 2):
+                        self.tanks[self.projectiles[j].tankID].replenishAmmo()
+                        self.projectiles.pop(j)
+                        self.tanks[i].die()
+                        isHitDetected = True
+                        break
+                    j += 1
             if isHitDetected == False:
                 i += 1
             isHitDetected = False
