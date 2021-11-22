@@ -68,6 +68,10 @@ class Round():
 
     def controlTank(self, tankIndex, binding, keyStatus):
 
+        # Skip tank if it is dead
+        if self.tanks[tankIndex].isAlive == False:
+            return
+
         if keyStatus == "pressed":
             if binding == "forward":
                 self.tanks[tankIndex].startMovingForward()
@@ -110,6 +114,9 @@ class Round():
 
     def updateTanks(self):
         for i in range(len(self.tanks)):
+            # Skip tank if it is dead
+            if self.tanks[i].isAlive == False:
+                continue
             row = int(self.tanks[i].y // self.mapCellSize)
             col = int(self.tanks[i].x // self.mapCellSize)
             currentMapCells = []
@@ -134,6 +141,9 @@ class Round():
     def getTanksTranslatedCorners(self):
         result = []
         for i in range(len(self.tanks)):
+            if self.tanks[i].isAlive == False:
+                result.append(None)
+                continue
             corners = self.tanks[i].getCorners()
             translatedCorners = []
             for corner in corners:
@@ -153,7 +163,7 @@ class Round():
             while j < len(self.projectiles):
                 # If Tank and Projectile hit (within a certain Pythagorean distance)
                 if (((self.tanks[i].x - self.projectiles[j].x) ** 2 + (self.tanks[i].y - self.projectiles[j].y) ** 2) ** 0.5 < self.settings["TANK_SIZE"] / 2):
-                    self.tanks.pop(i)
+                    self.tanks[i].die()
                     self.projectiles.pop(j)
                     isHitDetected = True
                     break
@@ -163,10 +173,10 @@ class Round():
             isHitDetected = False
 
         # Check win/draw conditions
-        if len(self.tanks) == 1:
-            return self.tanks[0].id
-        elif len(self.tanks) == 0:
-            pass # DRAW - how to handle this?
-
-
-
+        numTanksAlive = 0
+        for i in range(len(self.tanks)):
+            if self.tanks[i].isAlive == True:
+                numTanksAlive += 1
+                lastTankID = self.tanks[i].id
+        if numTanksAlive == 1:
+            return lastTankID

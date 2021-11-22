@@ -33,6 +33,12 @@ class Tank():
         self.corners = []
         self.updateCorners()
 
+        # Initialize .isAlive boolean
+        self.isAlive = True
+
+    def die(self):
+        self.isAlive = False
+
     def getCorners(self):
         return self.corners
 

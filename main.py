@@ -84,7 +84,8 @@ def drawTanks(app, canvas):
     # Get list of lists, each containing 4 tuples representing corners of tank polygon
     tanksTranslatedCorners = app.game.round.getTanksTranslatedCorners()
     for i in range(len(tanksTranslatedCorners)):
-        canvas.create_polygon(tanksTranslatedCorners[i], fill = app.game.settings["PLAYER_COLORS"][i])
+        if tanksTranslatedCorners[i] != None:
+            canvas.create_polygon(tanksTranslatedCorners[i], fill = app.game.settings["PLAYER_COLORS"][i])
 
 def drawProjectiles(app, canvas):
     # Get list of tuples, each representing 4 canvas coordinates of circle
