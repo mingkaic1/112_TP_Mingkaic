@@ -109,20 +109,21 @@ class GameAI():
 
     def shootAtTargetTank(self):
         self.tank.stopMovingForward()
-        angleToTarget = self.getAngleToTarget()
+        angleToTarget = self.getAngleToTargetTank()
         print(angleToTarget, self.constrainAngle(self.tank.theta))
         # If AI is not facing/aiming at .targetTank (needs to rotate)
         if self.constrainAngle(self.tank.theta) != angleToTarget:
             self.rotateToAngle(angleToTarget)
         # If AI is currently facing/aiming at .targetTank
         else:
+            self.stopRotation() # This fixed oscillation bug
             projectile = self.tank.fire()
             if projectile != None:
                 self.round.projectiles.append(projectile)
 
     # HELPER FUNCTION
     # Get the angle that .targetTank is in relation to AI tank
-    def getAngleToTarget(self):
+    def getAngleToTargetTank(self):
         dX = self.targetTank.x - self.tank.x
         dY = self.tank.y - self.targetTank.y
         atan2Angle = math.degrees(math.atan2(dX, dY)) # Angle from positive-x axis
