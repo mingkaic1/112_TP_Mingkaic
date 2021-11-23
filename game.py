@@ -33,7 +33,7 @@ class Game():
         # Initialize controls
         self.controls = {}
         for i in range(self.numPlayers):
-            self.controls[i] = self.settings["DEFAULT_CONTROLS"][i]
+            self.controls[i] = self.settings["DEFAULT_CONTROLS"].get(i, None)
 
         # Initialize round number
         self.roundNum = 0
@@ -48,17 +48,19 @@ class Game():
 
     def checkKeyPressed(self, key):
         for i in self.controls:
-            for binding in self.controls[i]:
-                if key == self.controls[i][binding]:
-                    self.round.controlTank(i, binding, "pressed")
-                    return
+            if (self.controls[i] != None):
+                for binding in self.controls[i]:
+                    if key == self.controls[i][binding]:
+                        self.round.controlTank(i, binding, "pressed")
+                        return
 
     def checkKeyReleased(self, key):
         for i in self.controls:
-            for binding in self.controls[i]:
-                if key == self.controls[i][binding]:
-                    self.round.controlTank(i, binding, "released")
-                    return
+            if (self.controls[i] != None):
+                for binding in self.controls[i]:
+                    if key == self.controls[i][binding]:
+                        self.round.controlTank(i, binding, "released")
+                        return
 
     def checkHits(self):
         result = self.round.checkHits()

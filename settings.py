@@ -1,5 +1,5 @@
 settings = {
-    "NUM_PLAYERS": 2,
+    "NUM_PLAYERS": 5,
     "NUM_AI": 1,
     "DEFAULT_CONTROLS": {
         1: {
@@ -43,5 +43,6 @@ settings = {
     "TANK_STARTING_AMMO": 5,
     "TANK_MAX_AMMO": 5,
     "PROJECTILE_LIFETIME_FRAMES": 400,
-    "D_THETA": 5
+    "D_THETA": 5,
+    "AI_FIRE_DELAY": 10 # Number of frames of delay in AI's firing rate
 }

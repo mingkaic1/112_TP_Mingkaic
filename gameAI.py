@@ -11,23 +11,26 @@ class GameAI():
         #   - .targetTank is the Tank that AI is targeting
         self.path = None
 
-        self.isInitialSteeringDone = False
+        self.framesSinceLastFire = 0
+
+        self.fireDelay = self.round.settings["AI_FIRE_DELAY"]
 
     def update(self):
         # If AI still has ammo, hunt for the nearest player Tank
         if self.tank.ammo > 0:
             self.getPathToTargetTank()
+            # Skip this .update() iteration if .getPathToTargetTank() failed to give a path
+            #   - (May happen at beginning of round, when player Tank(s) have yet to be assigned MapCells)
+            if self.path != None:
+                # If .targetTank is not yet within line-of-sight
+                if (self.inLineOfSight() == False):
+                    self.moveTowardNode()
+                # If .targetTank is within line-of-sight
+                else:
+                    self.shootAtTargetTank()
         # If AI has no ammo, avoid/ run away from players
         else:
             pass
-
-        if self.path != None:
-            # If .targetTank is not yet within line-of-sight
-            if self.inLineOfSight() == False:
-                self.moveTowardTargetTank()
-            # If .targetTank is within line-of-sight
-            else:
-                self.shootAtTargetTank()
 
     # Check if .targetTank is within line of sight (and hence AI can begin shooting)
     #   - Currently implemented naively (checking if .path is a straight line of nodes)
@@ -44,7 +47,8 @@ class GameAI():
             return True
         return False
 
-    def moveTowardTargetTank(self):
+    def moveTowardNode(self):
+        self.isInitialSteeringDone = False
         self.steer()
         if (self.isInitialSteeringDone == True):
             self.tank.startMovingForward()
@@ -114,6 +118,7 @@ class GameAI():
         return angleToNextNode
 
     def shootAtTargetTank(self):
+        self.framesSinceLastFire += 1
         self.tank.stopMovingForward()
         angleToTarget = self.getAngleToTargetTank()
         print(angleToTarget, self.constrainAngle(self.tank.theta))
@@ -123,9 +128,11 @@ class GameAI():
         # If AI is currently facing/aiming at .targetTank
         else:
             self.stopRotation() # This fixed oscillation bug
-            projectile = self.tank.fire()
-            if projectile != None:
-                self.round.projectiles.append(projectile)
+            if (self.framesSinceLastFire >= self.fireDelay):
+                projectile = self.tank.fire()
+                if projectile != None:
+                    self.round.projectiles.append(projectile)
+                    self.framesSinceLastFire = 0
 
     # HELPER FUNCTION
     # Get the angle that .targetTank is in relation to AI tank
