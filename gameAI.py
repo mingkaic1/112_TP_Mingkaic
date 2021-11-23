@@ -177,6 +177,16 @@ class GameAI():
     def constrainAngle(self, angle, min, max):
         while angle < min:
             angle += 360
-        while angle >= 360:
+        # TEMP FIX FOR BUG: Changed the below from >= to > (i.e. angle
+        # is kept to range including 360 rather than exclusive). This seems
+        # to be a rough fix for the recent donut bug (which is almost certainly
+        # due ot the recent changes to .constrainAngle()). Now it occasionally does
+        # a single donut in some cases when it is moving up and has to turn
+        # right, but doesn't seem to get stuck in the donut.
+        #
+        # Also, not sure if this is related, but this still doesn't fix the related (?)
+        # bug where it rotates counterclockwise occasionally when clockwise would
+        # clearly have been faster.
+        while angle > 360:
             angle -= 360
         return angle
