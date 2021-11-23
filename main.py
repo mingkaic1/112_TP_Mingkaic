@@ -10,8 +10,7 @@ from obstacles import *
 from fpsmeter import *
 import drawingHelpers # Includes top-level (non-encapsulated) drawing helper functions
 
-# Game will try to keep within +-20% of this FPS
-TARGET_FPS = 60
+TARGET_FPS = 100
 
 WIDTH = settings["WINDOW_WIDTH"]
 HEIGHT = settings["WINDOW_HEIGHT"]
