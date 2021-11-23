@@ -10,11 +10,17 @@ class GameAI():
         #   - .route stores the x, y conversion of path
         #   - .targetTank is the Tank that AI is targeting
         self.path = None
-        self.getNewPath()
 
         self.isInitialSteeringDone = False
 
     def update(self):
+        # If AI still has ammo, hunt for the nearest player Tank
+        if self.tank.ammo > 0:
+            self.getPathToTargetTank()
+        # If AI has no ammo, avoid/ run away from players
+        else:
+            pass
+
         if self.path != None:
             # If .targetTank is not yet within line-of-sight
             if self.inLineOfSight() == False:
@@ -135,7 +141,7 @@ class GameAI():
         return round((value // d) * d)
 
     # Get new path by calling pathfinding algorithms in .round.graph
-    def getNewPath(self):
+    def getPathToTargetTank(self):
         # Find the nearest Tank to target
         minDistance = float("inf")
         for i in range(self.round.settings["NUM_PLAYERS"]):

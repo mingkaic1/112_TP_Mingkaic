@@ -116,8 +116,12 @@ class Round():
         while i < len(self.projectiles):
             row = int(self.projectiles[i].y // self.mapCellSize)
             col = int(self.projectiles[i].x // self.mapCellSize)
-            currentMapCell = self.map.getMapCell(row, col)
-            self.projectiles[i].setCurrentCell(currentMapCell)
+            # Don't set new MapCell if Projectile has glitched out of range
+            #   - In this case, Projectile would just continue to fly out of map (to avoid crashing)
+            if ((row in range(0, self.settings["NUM_ROWS"])) and
+                (col in range(0, self.settings["NUM_COLS"]))):
+                currentMapCell = self.map.getMapCell(row, col)
+                self.projectiles[i].setCurrentCell(currentMapCell)
             self.projectiles[i].move()
             if (self.projectiles[i].framesLeft <= 0):
                 # Replenish the correct Tank's ammo by 1
@@ -152,7 +156,6 @@ class Round():
             # Skip if Tank controlled by GameAI is dead
             if self.gameAIs[i].tank.isAlive == False:
                 continue
-            self.gameAIs[i].getNewPath() # TO DO: Only do this when a player tank has changed its currentMapCells (otherwise, each frame will run
             self.gameAIs[i].update()
 
     def getProjectilesTranslatedCoordinates(self):
