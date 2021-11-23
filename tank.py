@@ -36,6 +36,9 @@ class Tank():
         # Initialize .isAlive boolean
         self.isAlive = True
 
+    def __repr__(self):
+        return f"Tank {self.id} ({self.settings['PLAYER_COLORS'][self.id].title()})"
+
     def die(self):
         self.isAlive = False
 

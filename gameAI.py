@@ -14,6 +14,11 @@ class GameAI():
         self.framesSinceLastFire = 0
 
     def update(self):
+        try:
+            print(self.targetTank, self.path)
+        except:
+            pass
+
         # If AI still has ammo, hunt for the nearest player Tank
         if self.tank.ammo > 0:
             self.getPathToTargetTank()
@@ -82,8 +87,6 @@ class GameAI():
         # If targetAngle is already reached
         else:
             self.stopRotation()
-
-
 
     def stopRotation(self):
         self.tank.stopSteeringLeft()

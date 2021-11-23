@@ -1,5 +1,5 @@
 settings = {
-    "NUM_PLAYERS": 5,
+    "NUM_PLAYERS": 3,
     "NUM_AI": 1,
     "DEFAULT_CONTROLS": {
         1: {
