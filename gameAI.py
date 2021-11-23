@@ -5,15 +5,13 @@ class GameAI():
         self.tank = tank
         self.round = round
 
-        # Initialize .path, .route, .targetTank
+        # Initialize .path
         #   - .path stores the MapCell path to nearest Tank
-        #   - .route stores the x, y conversion of path
-        #   - .targetTank is the Tank that AI is targeting
         self.path = None
 
-        self.framesSinceLastFire = 0
-
+        # Variables to control the AI's firing rate
         self.fireDelay = self.round.settings["AI_FIRE_DELAY"]
+        self.framesSinceLastFire = 0
 
     def update(self):
         # If AI still has ammo, hunt for the nearest player Tank
@@ -30,7 +28,7 @@ class GameAI():
                     self.shootAtTargetTank()
         # If AI has no ammo, avoid/ run away from players
         else:
-            pass
+            pass # TO DO
 
     # Check if .targetTank is within line of sight (and hence AI can begin shooting)
     #   - Currently implemented naively (checking if .path is a straight line of nodes)
@@ -47,29 +45,32 @@ class GameAI():
             return True
         return False
 
+    # Follow .path to move toward the target node
     def moveTowardNode(self):
         self.isInitialSteeringDone = False
         self.steer()
         if (self.isInitialSteeringDone == True):
             self.tank.startMovingForward()
 
+    # Steer along the path
     def steer(self):
         angleToNextNode = self.getAngleToNextNode()
         # If AI is currently not facing next node
-        if self.constrainAngle(self.tank.theta) != angleToNextNode:
-            self.rotateToAngle(angleToNextNode)
+        if self.constrainAngle(self.tank.theta, 0, 360) != angleToNextNode:
+            self.rotateTowardAngle(angleToNextNode)
         # If AI is facing next node
         else:
             self.stopRotation()
             self.isInitialSteeringDone = True
 
-    def rotateToAngle(self, targetAngle):
+    # Keep on rotating (in the nearest direction: clockwise or counterclockwise) toward a target angle
+    #   - Can be used when AI Tank is moving (steering), or stationary (rotating)
+    #   - Does NOT stop steering once the target angle is reached
+    #       - To avoid oscillation bug, use .stopRotation()
+    def rotateTowardAngle(self, targetAngle):
         # Find the difference in angle to turn through (ensure within -180 to 180)
-        dAngle = targetAngle - self.constrainAngle(self.tank.theta)
-        while dAngle <= -180:
-            dAngle += 360
-        while dAngle > 180:
-            dAngle -= 360
+        dAngle = targetAngle - self.constrainAngle(self.tank.theta, 0, 360)
+        dAngle = self.constrainAngle(dAngle, -180, 180)
         # If faster to turn counterclockwise
         if (dAngle > 0):
             self.tank.startSteeringLeft()
@@ -82,19 +83,12 @@ class GameAI():
         else:
             self.stopRotation()
 
-    # Constrain an angle to 0-359
-    def constrainAngle(self, angle):
-        while angle < 0:
-            angle += 360
-        while angle >= 360:
-            angle -= 360
-        return angle
+
 
     def stopRotation(self):
         self.tank.stopSteeringLeft()
         self.tank.stopSteeringRight()
 
-    # HELPER FUNCTION
     # Get the angle (0, 90, 180, 270 deg) that the next node is in relation to current node
     def getAngleToNextNode(self):
         currentNode = self.path[0]
@@ -117,14 +111,14 @@ class GameAI():
                 angleToNextNode = 180
         return angleToNextNode
 
+    # Stop moving and rotate toward targetTank; if aiming directly, shoot (with the necessary fire delay)
     def shootAtTargetTank(self):
         self.framesSinceLastFire += 1
         self.tank.stopMovingForward()
         angleToTarget = self.getAngleToTargetTank()
-        print(angleToTarget, self.constrainAngle(self.tank.theta))
         # If AI is not facing/aiming at .targetTank (needs to rotate)
-        if self.constrainAngle(self.tank.theta) != angleToTarget:
-            self.rotateToAngle(angleToTarget)
+        if self.constrainAngle(self.tank.theta, 0, 360) != angleToTarget:
+            self.rotateTowardAngle(angleToTarget)
         # If AI is currently facing/aiming at .targetTank
         else:
             self.stopRotation() # This fixed oscillation bug
@@ -134,18 +128,13 @@ class GameAI():
                     self.round.projectiles.append(projectile)
                     self.framesSinceLastFire = 0
 
-    # HELPER FUNCTION
     # Get the angle that .targetTank is in relation to AI tank
     def getAngleToTargetTank(self):
         dX = self.targetTank.x - self.tank.x
         dY = self.tank.y - self.targetTank.y
         atan2Angle = math.degrees(math.atan2(dX, dY)) # Angle from positive-x axis
-        angleToTarget = self.roundToNearest(self.constrainAngle(360 - atan2Angle), self.round.settings["D_THETA"])
+        angleToTarget = self.roundToNearest(self.constrainAngle(360 - atan2Angle, 0, 360), self.round.settings["D_THETA"])
         return angleToTarget
-
-    # HELPER FUNCTION
-    def roundToNearest(self, value, d):
-        return round((value // d) * d)
 
     # Get new path by calling pathfinding algorithms in .round.graph
     def getPathToTargetTank(self):
@@ -168,8 +157,23 @@ class GameAI():
             targetNode = (self.targetTank.centralMapCell.row, self.targetTank.centralMapCell.col)
             self.path = self.round.graph.findPath(selfNode, targetNode)
 
-    # HELPER FUNCTION
+# --------------------
+# MATH & GEOMETRY HELPER FUNCTIONS
+# --------------------
+
+    def roundToNearest(self, value, d):
+        return round((value // d) * d)
+
     def getPythagoreanDistance(self, point1, point2):
         x1, y1 = point1
         x2, y2 = point2
         return ((x1 - x2)**2 + (y1 - y2)**2)**0.5
+
+    # Return the "principle range" of an angle as defined by min (inclusive) and max (exclusive)
+    #   - Basically, add 360 or -360 until angle falls within the range
+    def constrainAngle(self, angle, min, max):
+        while angle < min:
+            angle += 360
+        while angle >= 360:
+            angle -= 360
+        return angle
