@@ -9,7 +9,9 @@ from round import *
 from game import *
 from settings import *
 
+# Game will try to keep within +-20% of this FPS
 TARGET_FPS = 100
+
 WIDTH = settings["WINDOW_WIDTH"]
 HEIGHT = settings["WINDOW_HEIGHT"]
 
@@ -18,12 +20,14 @@ HEIGHT = settings["WINDOW_HEIGHT"]
 # --------------------
 
 def appStarted(app):
-    app.timerDelay = 1000 // TARGET_FPS
+    app.timerDelay = 1000 // (TARGET_FPS * 2) # This seems to work well as a starting value (at least with TARGET_FPS = 60 on MY computer)
     app.mode = "gameMode"
     app.framesElapsed = 0
 
     # FPSmeter
     app.fpsMeter = FPSmeter()
+
+    app.framesSinceLastFPSAdjust = 0
 
     # Initialize Game object
     app.game = Game(settings)
@@ -54,6 +58,16 @@ def gameMode_timerFired(app):
 
     # Check if any tank is hit (and if the round is over)
     app.game.checkHits()
+
+    # Try to maintain a constant FPS by adjusting app.timerDelay
+    currentFPS = app.fpsMeter.getFPS()
+    # Need to boost FPS (decrease app.timerDelay)
+    if currentFPS < TARGET_FPS * 0.8:
+        app.timerDelay = int((app.timerDelay * 0.9) // 1) # Round down
+    # Need to lower FPS (increase app.timerDelay)
+    elif currentFPS > TARGET_FPS * 1.2:
+        app.timerDelay = int((app.timerDelay * 1.1 + 1) // 1) # Round up
+    print(app.timerDelay)
 
 def gameMode_keyPressed(app, event):
 
