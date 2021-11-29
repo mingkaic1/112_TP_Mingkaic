@@ -23,6 +23,7 @@ def appStarted(app):
 
     app.timerDelay = 1000 // (TARGET_FPS * 2) # This seems to work well as a starting value (at least with TARGET_FPS = 60 on MY computer)
     app.mode = "gameMode"
+    app.isPaused = False
 
     # For timing actions (executing actions at specific intervals, etc.)
     app.framesElapsed = 0
@@ -39,6 +40,10 @@ def appStarted(app):
 # --------------------
 
 def gameMode_timerFired(app):
+
+    # Skip if game is paused
+    if (app.isPaused == True):
+        return
 
     app.framesElapsed += 1
 
@@ -63,6 +68,13 @@ def gameMode_timerFired(app):
 
 def gameMode_keyPressed(app, event):
 
+    if (event.key == "p"):
+        app.isPaused = not app.isPaused
+
+    # Skip if game is paused
+    if (app.isPaused == True):
+        return
+
     # Check if event.key controls any player Tank; if so, make the control
     app.game.checkKeyPressed(event.key)
 
@@ -70,6 +82,10 @@ def gameMode_keyPressed(app, event):
         app.game.round.isOver = True
 
 def gameMode_keyReleased(app, event):
+
+    # Skip if game is paused
+    if (app.isPaused == True):
+        return
 
     # Check if event.key controls any player Tank; if so, make the control
     app.game.checkKeyReleased(event.key)

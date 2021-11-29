@@ -1,6 +1,6 @@
 settings = {
     "NUM_PLAYERS": 2,
-    "NUM_AI": 1,
+    "NUM_AI": 2,
     "DEFAULT_CONTROLS": {
         1: {
             "forward": "Up",
@@ -25,8 +25,7 @@ settings = {
         4: "pink",
         5: "purple",
         6: "brown",
-        7: "black",
-        8: "cyan"
+        7: "cyan"
     },
     "WINDOW_WIDTH": 1200,
     "WINDOW_HEIGHT": 1000,
@@ -40,8 +39,7 @@ settings = {
     "NUM_COLS": 10,
     "MARGIN": 100, # Adjust to center map
     "TANK_SPEED": 3,
-    "MODE": "pvp", # "pvp" or "pvai"
-    "MIN_STARTING_MANHATTAN_SEPARATION_RATIO": 0.1 , # E.g. If NUM_COLS = 10, Tanks' starting positions must be at least 0.7*10 = 7 cells apart (Manhattan distance)
+    "MIN_STARTING_MANHATTAN_SEPARATION_RATIO": 0 , # E.g. If NUM_COLS = 10, Tanks' starting positions must be at least 0.7*10 = 7 cells apart (Manhattan distance)
     "TANK_STARTING_AMMO": 5,
     "TANK_MAX_AMMO": 5,
     "PROJECTILE_LIFETIME_FRAMES": 400,

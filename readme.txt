@@ -12,7 +12,7 @@ direction in 2D within the bounds of the walls).
 --------------------
 1. HOW TO RUN
 --------------------
-
+    
 First, ensure that all required Python modules are installed (see below for
 list). For most systems, all required modules should already be installed with
 Python as MK-AZ does not use any module outside of the Python Standard Library.
@@ -50,3 +50,4 @@ CMU 15-112 Fundamentals of Programming and Computer Science:
 --------------------
 
 Press R to kill the current round and start a new round.
+Press P to pause/unpase the game.

@@ -9,7 +9,8 @@ def drawTanks(app, canvas):
     tanksTranslatedCorners = app.game.round.getTanksTranslatedCorners()
     for i in range(len(tanksTranslatedCorners)):
         if tanksTranslatedCorners[i] != None:
-            canvas.create_polygon(tanksTranslatedCorners[i], fill=app.game.settings["PLAYER_COLORS"][i])
+            color = app.game.settings["PLAYER_COLORS"].get(i, "black")
+            canvas.create_polygon(tanksTranslatedCorners[i], fill=color)
 
 def drawProjectiles(app, canvas):
 
@@ -28,4 +29,5 @@ def drawScores(app, canvas):
     x0 = (app.game.settings["WINDOW_WIDTH"] - (app.game.settings["NUM_PLAYERS"] + app.game.settings["NUM_AI"] - 1) * xGap) // 2
     y = ((app.game.settings["MARGIN"] + app.game.settings["NUM_ROWS"] * app.game.settings["MAPCELL_SIZE"]) + app.game.settings["WINDOW_HEIGHT"]) // 2
     for i in range(app.game.settings["NUM_PLAYERS"] + app.game.settings["NUM_AI"]):
-        canvas.create_text(x0 + i * xGap, y, font="Arial 80 bold", fill=app.game.settings["PLAYER_COLORS"][i], text=f"{app.game.scores[i]}")
+        color = app.game.settings["PLAYER_COLORS"].get(i, "black")
+        canvas.create_text(x0 + i * xGap, y, font="Arial 80 bold", fill=color, text=f"{app.game.scores[i]}")
