@@ -15,7 +15,7 @@ from obstacles import *
 from fpsmeter import *
 import drawingHelpers # Includes top-level (non-encapsulated) drawing helper functions
 
-TARGET_FPS = 100
+TARGET_FPS = 60
 
 WIDTH = settings["WINDOW_WIDTH"]
 HEIGHT = settings["WINDOW_HEIGHT"]

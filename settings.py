@@ -11,7 +11,7 @@ settings = {
     #   - A Tank's controls must be defined below in "DEFAULT_CONTROLS" to be
     #     player-controlled (otherwise, it just sits there)
     #   - The Round will instantly end if there is only 1 Tank
-    "NUM_PLAYERS": 3,
+    "NUM_PLAYERS": 2,
     "NUM_AI": 0,
 
     # Define keyboard controls here
