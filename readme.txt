@@ -50,4 +50,4 @@ CMU 15-112 Fundamentals of Programming and Computer Science:
 --------------------
 
 Press R to kill the current round and start a new round.
-Press P to pause/unpase the game.
+Press P to pause/unpause the game.
