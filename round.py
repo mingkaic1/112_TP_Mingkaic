@@ -16,6 +16,7 @@ from graph import *
 from gameAI import *
 
 class Round():
+
     def __init__(self, settings):
         self.settings = settings
         self.numPlayers = self.settings["NUM_PLAYERS"]
@@ -38,11 +39,7 @@ class Round():
         # Initialize .mapCellSize (a setting variable, for streamlining .updateProjectiles())
         self.mapCellSize = self.settings["MAPCELL_SIZE"]
 
-
-        print("path finding start")
-        print(self.graph.findPathDijkstra((0, 0), (5, 5)))
-        print("path finding done")
-
+    # Initialize Tanks (stored in .tanks attribute), and give them starting positions
     def initTanks(self):
         # Keep on generating new combinations of starting positions, until a valid one is found
         while True:
@@ -64,7 +61,7 @@ class Round():
         # Make random list of starting angles
         #   - Round each starting angle to nearest D_THETA
         tankStartingAngles = [self.roundToNearest(random.randint(0, 359), self.settings["D_THETA"]) for i in range(self.numPlayers + self.numAI)]
-        # Initialize .tank objects
+        # Initialize Tank objects
         self.tanks = []
         for id in range(self.numPlayers + self.numAI):
             startingX = (tankStartingPositions[id][1] + 0.5) * self.settings["MAPCELL_SIZE"]
@@ -76,26 +73,18 @@ class Round():
                                    startingY,
                                    startingTheta))
 
+    # Initialize GameAIs
     def initGameAIs(self):
         self.gameAIs = []
         for i in range(self.settings["NUM_AI"]):
             tankID = i + self.settings["NUM_PLAYERS"]
             self.gameAIs.append(GameAI(self.tanks[tankID], self))
 
-    # HELPER FUNCTION
-    def getManhattanSeparation(self, position1, position2):
-        return abs(position1[0] - position2[0]) + abs(position1[1] - position1[1])
-
-    # HELPER FUNCTION
-    def roundToNearest(self, value, d):
-        return int((value // d) * d)
-
+    # Game object parses user keyboard input, and sends it here to control Tank(s)
     def controlTank(self, tankIndex, binding, keyStatus):
-
         # Skip tank if it is dead
         if self.tanks[tankIndex].isAlive == False:
             return
-
         if keyStatus == "pressed":
             if binding == "forward":
                 self.tanks[tankIndex].startMovingForward()
@@ -109,7 +98,6 @@ class Round():
                 projectile = self.tanks[tankIndex].fire()
                 if projectile != None:
                     self.projectiles.append(projectile)
-
         if keyStatus == "released":
             if binding == "forward":
                 self.tanks[tankIndex].stopMovingForward()
@@ -120,6 +108,7 @@ class Round():
             if binding == "right":
                 self.tanks[tankIndex].stopSteeringRight()
 
+    # Update all Projectiles each frame
     def updateProjectiles(self):
         i = 0
         while i < len(self.projectiles):
@@ -140,6 +129,7 @@ class Round():
             else:
                 i += 1
 
+    # Update all Tanks each frame
     def updateTanks(self):
         for i in range(len(self.tanks)):
             # Skip tank if it is dead
@@ -160,6 +150,7 @@ class Round():
             self.tanks[i].setCentralMapCell(centralMapCell)
             self.tanks[i].update()
 
+    # Update all GameAIs each frame
     def updateGameAIs(self):
         for i in range(len(self.gameAIs)):
             # Skip if Tank controlled by GameAI is dead
@@ -167,6 +158,7 @@ class Round():
                 continue
             self.gameAIs[i].update()
 
+    # Get a list of tuples representing Projectiles for drawing in tkinter
     def getProjectilesTranslatedCoordinates(self):
         result = []
         for i in range(len(self.projectiles)):
@@ -176,6 +168,7 @@ class Round():
                            self.projectiles[i].y + self.projectiles[i].r + self.settings["MARGIN"]))
         return result
 
+    # Get a list of tuples representing Tank polygon vertices for drawing in tkinter
     def getTanksTranslatedCorners(self):
         result = []
         for i in range(len(self.tanks)):
@@ -191,7 +184,7 @@ class Round():
         return result
 
     # Check whether any projectile hits any tank; if so, remove the projectile and tank.
-    # If only 1 tank is remaining (i.e. wins round), return tank.id
+    #   - If only 1 tank is remaining (i.e. wins round), return tank.id
     def checkHits(self):
         # TEMP: Really basic hit detection right now. TO CHANGE
         i = 0
@@ -212,7 +205,6 @@ class Round():
             if isHitDetected == False:
                 i += 1
             isHitDetected = False
-
         # Check win/draw conditions
         numTanksAlive = 0
         for i in range(len(self.tanks)):
@@ -221,3 +213,13 @@ class Round():
                 lastTankID = self.tanks[i].id
         if numTanksAlive == 1:
             return lastTankID
+
+# --------------------
+# MATH AND GEOMETRY HELPER FUNCTIONS
+# --------------------
+
+    def getManhattanSeparation(self, position1, position2):
+        return abs(position1[0] - position2[0]) + abs(position1[1] - position1[1])
+
+    def roundToNearest(self, value, d):
+        return int((value // d) * d)
