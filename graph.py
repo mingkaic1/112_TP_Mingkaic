@@ -1,3 +1,11 @@
+# --------------------
+# GRAPH.PY
+# - Graph class
+#   - Data structure for representing map as a graph (implemented as a
+#     dictionary)
+#   - Encapsulates pathfinding algorithm(s)
+# --------------------
+
 class Graph():
     def __init__(self, maze):
         self.graphDict = {}

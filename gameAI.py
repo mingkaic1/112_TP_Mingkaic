@@ -1,3 +1,9 @@
+# --------------------
+# GAMEAI.PY
+# - GameAI class
+#   - Controls the Tank by making decisions based on the current game state
+# --------------------
+
 import math
 
 class GameAI():

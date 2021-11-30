@@ -1,3 +1,14 @@
+# --------------------
+# MAP.PY
+# - Map class
+#   - Represents the 2D gameplay area
+#   - Essentially, Map is the "front-end," and is generated based on a Maze
+#     which is the "back-end"
+# - MapCell class
+#   - A 2D list of MapCells is used in the Map class to represent the gameplay
+#     area
+# --------------------
+
 from obstacles import *
 
 class Map():

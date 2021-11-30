@@ -1,3 +1,9 @@
+# --------------------
+# GAME.PY
+# - Game class
+#   - Handles high-level game mechanics (keyboard controls & starting rounds)
+# --------------------
+
 from round import *
 
 class Game():

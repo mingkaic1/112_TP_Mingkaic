@@ -1,3 +1,10 @@
+# --------------------
+# TANK.PY
+# - Tank class
+#   - Playable tank that can be controlled by a player or GameAI
+#   - Handles object collision with Walls
+# --------------------
+
 import math
 from projectiles import *
 

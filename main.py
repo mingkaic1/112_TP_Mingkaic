@@ -1,3 +1,8 @@
+# --------------------
+# MAIN.PY
+# - Main game loop and user interface
+# --------------------
+
 from cmu_112_graphics import *
 from settings import *
 from game import *

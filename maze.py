@@ -1,3 +1,13 @@
+# --------------------
+# MAZE.PY
+# - Maze class
+#   - Handles maze generation (contains maze generation algorithms)
+#   - Used to create a Map object each Round
+#   - Essentially, Map is the "front-end" while Maze is the "back-end"
+# - Cell class
+#   - A 2D list of Cells is used by Maze to represent the maze grid
+# --------------------
+
 import random, time, statistics
 from suppressprint import *
 

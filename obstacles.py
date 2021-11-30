@@ -1,3 +1,12 @@
+# --------------------
+# OBSTACLES.PY
+# - Obstacle class
+#   - Generic parent class for all obstacles (Walls, etc.) to handle object
+#     collision etc.
+# - Wall(Obstacle) class
+#   - A simple rectangular Obstacle defined by 2 points
+# --------------------
+
 class Obstacle():
     def __init__(self):
         pass

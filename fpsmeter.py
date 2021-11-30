@@ -1,3 +1,10 @@
+# --------------------
+# FPSMETER.PY
+# - FPSmeter class
+#   - Measures frames-per-second (FPS) for debugging &
+#     analyzing app performance
+# --------------------
+
 import time
 
 class FPSmeter():

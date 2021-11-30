@@ -1,3 +1,12 @@
+# --------------------
+# PROJECTILES.PY
+# - Projectile class
+#   - Generic parent class for all "weapons" that bounce off walls
+#   - Handles object collision with Obstacles
+# - Bullet(Projectile) class
+#   - The simplest Projectile that Tanks fire by default
+# --------------------
+
 import math
 
 class Projectile():

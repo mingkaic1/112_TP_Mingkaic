@@ -1,3 +1,8 @@
+# --------------------
+# DRAWINGHELPERS.PY
+# - Helper functions for tkinter/CMU_112_Graphics drawing
+# --------------------
+
 def drawWalls(app, canvas):
 
     for wall in app.game.round.map.translatedWallRectangles:

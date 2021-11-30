@@ -1,3 +1,12 @@
+# --------------------
+# ROUND.PY
+# - Round class
+#   - Handles mid-level (i.e. the majority of) game mechanics
+#   - A new Round is created by the Game object every round during gameplay
+#   - Stores the current Maze, Map, Graph, Tanks, Projectiles, GameAIs as
+#     attributes
+# --------------------
+
 import random
 
 from maze import *

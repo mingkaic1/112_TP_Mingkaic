@@ -1,3 +1,9 @@
+# --------------------
+# SETTINGS.PY
+# - settings constant
+#   - All game settings (except TARGET_FPS) can be edited here
+# --------------------
+
 settings = {
     "NUM_PLAYERS": 2,
     "NUM_AI": 2,

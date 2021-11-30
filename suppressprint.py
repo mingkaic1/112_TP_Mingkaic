@@ -1,3 +1,10 @@
+# --------------------
+# SUPPRESSPRINT.PY
+# - SuppressPrint class
+#   - Sole purpose of suppressing Python terminal output
+#   - For debugging only; specifically, .textAlgorithms() method of Maze class
+# --------------------
+
 import os, sys
 
 # CITATION
